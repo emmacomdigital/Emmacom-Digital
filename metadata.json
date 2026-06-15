@@ -1,0 +1,6 @@
+{
+  "name": "Emmacom Digital Affiliate",
+  "description": "An affiliate marketing and recurring commission tracking platform for Emmacom Digital with automatic compliance tracking, withdrawal workflows, and custom payment simulation features.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
