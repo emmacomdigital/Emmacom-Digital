@@ -190,6 +190,7 @@ export default function App() {
           />
         ) : showLogin ? (
           <LoginScreen 
+            storeState={storeState}
             onLoginSuccess={handleLoginSuccess} 
             onNavigateToRegister={() => {
               setShowLogin(false);
