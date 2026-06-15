@@ -5,6 +5,7 @@ import AffiliateDashboard from "./components/AffiliateDashboard";
 import JoinPage from "./components/JoinPage";
 import WhatsAppSupport from "./components/WhatsAppSupport";
 import LoginScreen from "./components/LoginScreen";
+import FrontendLanding from "./components/FrontendLanding";
 import { 
   Bell, 
   Settings, 
@@ -22,6 +23,7 @@ export default function App() {
   const [storeState, setStoreState] = useState<AffiliateSystemStore>(appStore);
   const [activeRole, setActiveRole] = useState<"admin" | "affiliate" | "join">("affiliate");
   const [showRegister, setShowRegister] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   
   // Authenticated state wrapper (keeps state local or simulated)
   const [authenticatedUser, setAuthenticatedUser] = useState<{
@@ -161,6 +163,7 @@ export default function App() {
             onRefresh={handleRefresh}
             onJoinSuccess={(newUserId) => {
               setShowRegister(false);
+              setShowLogin(false);
               setActiveRole("affiliate");
               setSelectedUserId(newUserId);
               
@@ -176,12 +179,37 @@ export default function App() {
               }
             }}
             initialSponsorCode={simulatedSponsorCode}
-            onNavigateToLogin={() => setShowRegister(false)}
+            onNavigateToLogin={() => {
+              setShowRegister(false);
+              setShowLogin(true);
+            }}
+            onNavigateToHome={() => {
+              setShowRegister(false);
+              setShowLogin(false);
+            }}
           />
-        ) : (
+        ) : showLogin ? (
           <LoginScreen 
             onLoginSuccess={handleLoginSuccess} 
-            onNavigateToRegister={() => setShowRegister(true)}
+            onNavigateToRegister={() => {
+              setShowLogin(false);
+              setShowRegister(true);
+            }}
+            onNavigateToHome={() => {
+              setShowLogin(false);
+              setShowRegister(false);
+            }}
+          />
+        ) : (
+          <FrontendLanding
+            onLoginClick={() => {
+              setShowLogin(true);
+              setShowRegister(false);
+            }}
+            onRegisterClick={() => {
+              setShowRegister(true);
+              setShowLogin(false);
+            }}
           />
         )}
         <footer className="bg-slate-950 text-slate-400 border-t border-slate-900 py-6 px-4 md:px-8 text-xs font-mono mt-auto relative">

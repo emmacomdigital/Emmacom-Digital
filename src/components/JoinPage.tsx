@@ -8,9 +8,10 @@ interface JoinPageProps {
   onJoinSuccess: (newUserId: string) => void;
   initialSponsorCode?: string | null;
   onNavigateToLogin?: () => void;
+  onNavigateToHome?: () => void;
 }
 
-export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initialSponsorCode, onNavigateToLogin }: JoinPageProps) {
+export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initialSponsorCode, onNavigateToLogin, onNavigateToHome }: JoinPageProps) {
   // Input fields
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -153,15 +154,27 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
                 <UserPlus className="h-5 w-5 text-indigo-600" />
                 <span>Partner Account Sign Up</span>
               </h2>
-              {onNavigateToLogin && (
-                <button
-                  type="button"
-                  onClick={onNavigateToLogin}
-                  className="text-xs text-indigo-600 hover:text-indigo-800 font-bold signup-login-toggle"
-                >
-                  Already have an account? Sign In
-                </button>
-              )}
+              <div className="flex items-center space-x-3.5">
+                {onNavigateToLogin && (
+                  <button
+                    type="button"
+                    onClick={onNavigateToLogin}
+                    className="text-xs text-indigo-600 hover:text-indigo-800 font-bold signup-login-toggle cursor-pointer"
+                  >
+                    Already have an account? Sign In
+                  </button>
+                )}
+                {onNavigateToHome && (
+                  <button
+                    type="button"
+                    onClick={onNavigateToHome}
+                    className="text-xs text-slate-500 hover:text-indigo-650 font-bold cursor-pointer"
+                    id="back-to-home-from-signup"
+                  >
+                    | Public Website
+                  </button>
+                )}
+              </div>
             </div>
 
             {errorMsg && (

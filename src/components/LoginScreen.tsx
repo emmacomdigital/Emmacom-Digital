@@ -5,9 +5,10 @@ import { Cloud, Lock, Mail, Server, ShieldCheck, ArrowRight, Sparkles } from "lu
 interface LoginScreenProps {
   onLoginSuccess: (user: { user_id: string; email: string; full_name: string; is_admin: boolean }) => void;
   onNavigateToRegister: () => void;
+  onNavigateToHome?: () => void;
 }
 
-export default function LoginScreen({ onLoginSuccess, onNavigateToRegister }: LoginScreenProps) {
+export default function LoginScreen({ onLoginSuccess, onNavigateToRegister, onNavigateToHome }: LoginScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -154,10 +155,20 @@ export default function LoginScreen({ onLoginSuccess, onNavigateToRegister }: Lo
             <button
               type="button"
               onClick={onNavigateToRegister}
-              className="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer hover:border-slate-300"
+              className="w-full py-2.5 px-4 bg-indigo-50 hover:bg-indigo-100/60 text-indigo-750 font-bold text-xs rounded-xl transition-all cursor-pointer border border-indigo-100"
             >
               Sign Up & Register Today
             </button>
+            {onNavigateToHome && (
+              <button
+                type="button"
+                onClick={onNavigateToHome}
+                className="w-full py-2 text-center text-xs text-slate-500 hover:text-indigo-600 font-bold transition-colors cursor-pointer block mt-1"
+                id="back-to-home-from-login"
+              >
+                ← Back to Public Website Learn More
+              </button>
+            )}
           </div>
         </div>
       </motion.div>
