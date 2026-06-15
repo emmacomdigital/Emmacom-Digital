@@ -4,9 +4,10 @@ import { Cloud, Lock, Mail, Server, ShieldCheck, ArrowRight, Sparkles } from "lu
 
 interface LoginScreenProps {
   onLoginSuccess: (user: { user_id: string; email: string; full_name: string; is_admin: boolean }) => void;
+  onNavigateToRegister: () => void;
 }
 
-export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
+export default function LoginScreen({ onLoginSuccess, onNavigateToRegister }: LoginScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -83,7 +84,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
             <Cloud className="h-6 w-6 text-sky-200" />
           </motion.div>
           <h2 className="text-xl font-black tracking-tight dialog-title uppercase font-sans">Emmacom Digital</h2>
-          <p className="text-xs text-indigo-100 font-medium">Partner Commission Hub & Cloudflare Sandbox</p>
+          <p className="text-xs text-indigo-100 font-medium">Partner Commission Hub</p>
         </div>
 
         {/* Dynamic Login Form */}
@@ -145,36 +146,18 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
             </button>
           </form>
 
-          {/* Easy Presets for Reviewers */}
-          <div className="border-t border-slate-100 pt-5 space-y-3">
-            <div className="flex items-center justify-center space-x-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              <Sparkles className="h-3 w-3 text-indigo-500" />
-              <span>Sandbox Evaluator Presets</span>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <button
-                type="button"
-                onClick={() => handleFastLogin("admin")}
-                className="py-2 px-1 text-[10px] font-bold bg-slate-50 hover:bg-indigo-50 text-indigo-650 hover:text-indigo-700 rounded-lg border border-slate-200 hover:border-indigo-200 transition-all cursor-pointer"
-              >
-                Admin Panel
-              </button>
-              <button
-                type="button"
-                onClick={() => handleFastLogin("john")}
-                className="py-2 px-1 text-[10px] font-bold bg-slate-50 hover:bg-indigo-50 text-indigo-650 hover:text-indigo-700 rounded-lg border border-slate-200 hover:border-indigo-200 transition-all cursor-pointer"
-              >
-                John (Affiliate)
-              </button>
-              <button
-                type="button"
-                onClick={() => handleFastLogin("mary")}
-                className="py-2 px-1 text-[10px] font-bold bg-slate-50 hover:bg-indigo-50 text-indigo-650 hover:text-indigo-700 rounded-lg border border-slate-200 hover:border-indigo-200 transition-all cursor-pointer"
-              >
-                Mary (Affiliate)
-              </button>
-            </div>
+          {/* Navigation to Registration */}
+          <div className="border-t border-slate-100 pt-5 text-center space-y-3">
+            <p className="text-xs text-slate-500 font-sans">
+              Don't have an affiliate partner account?
+            </p>
+            <button
+              type="button"
+              onClick={onNavigateToRegister}
+              className="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer hover:border-slate-300"
+            >
+              Sign Up & Register Today
+            </button>
           </div>
         </div>
       </motion.div>

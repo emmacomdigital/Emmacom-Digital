@@ -7,9 +7,10 @@ interface JoinPageProps {
   onRefresh: () => void;
   onJoinSuccess: (newUserId: string) => void;
   initialSponsorCode?: string | null;
+  onNavigateToLogin?: () => void;
 }
 
-export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initialSponsorCode }: JoinPageProps) {
+export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initialSponsorCode, onNavigateToLogin }: JoinPageProps) {
   // Input fields
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -147,10 +148,21 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Main Registration Form */}
           <div className="lg:col-span-7 bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
-              <UserPlus className="h-5 w-5 text-indigo-600" />
-              <span>Partner Account Sign Up</span>
-            </h2>
+            <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                <UserPlus className="h-5 w-5 text-indigo-600" />
+                <span>Partner Account Sign Up</span>
+              </h2>
+              {onNavigateToLogin && (
+                <button
+                  type="button"
+                  onClick={onNavigateToLogin}
+                  className="text-xs text-indigo-600 hover:text-indigo-800 font-bold signup-login-toggle"
+                >
+                  Already have an account? Sign In
+                </button>
+              )}
+            </div>
 
             {errorMsg && (
               <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded text-red-700 text-sm">
@@ -240,27 +252,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
                   </p>
                 )}
 
-                {/* Sandbox sponsors quick selector tool */}
-                <div className="mt-3 pt-3 border-t border-gray-200/50">
-                  <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
-                    💡 Click to simulate sponsor referral check:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {storeState.affiliates.slice(0, 3).map(aff => {
-                      const u = storeState.users.find(usr => usr.user_id === aff.user_id);
-                      return (
-                        <button
-                          key={aff.affiliate_id}
-                          type="button"
-                          onClick={() => setSponsorCode(aff.affiliate_id)}
-                          className="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 py-1 px-2 rounded font-mono transition-all font-semibold cursor-pointer border border-slate-200"
-                        >
-                          {aff.affiliate_id} ({u?.full_name.split(" ")[0]})
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+
               </div>
 
               {/* Terms Indicator */}
