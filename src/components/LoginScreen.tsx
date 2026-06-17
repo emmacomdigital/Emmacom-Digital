@@ -98,7 +98,7 @@ export default function LoginScreen({ storeState, onLoginSuccess, onNavigateToRe
         is_admin: data.is_admin,
       });
     } catch (err: any) {
-      setError(err.message || "Connection refused to Cloudflare Express server.");
+      setError(err.message || "Connection refused to Authentication server.");
     } finally {
       setLoading(false);
     }
@@ -117,18 +117,18 @@ export default function LoginScreen({ storeState, onLoginSuccess, onNavigateToRe
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center p-4 sm:p-6 md:p-8" id="cloudflare-login-screen">
+    <div className="min-h-[85vh] flex items-center justify-center p-4 sm:p-6 md:p-8" id="emmacom-login-screen">
       <motion.div 
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
         className="w-full max-w-md bg-white rounded-3xl border border-gray-155 shadow-xl shadow-slate-100 overflow-hidden"
       >
-        {/* Top Decorative Cloudflare-themed Banner */}
+        {/* Top Decorative Banner */}
         <div className="bg-gradient-to-r from-sky-500 via-indigo-600 to-indigo-700 p-6 text-white text-center relative">
           <div className="absolute top-3 right-3 bg-white/10 text-white text-[9px] font-bold py-1 px-2.5 rounded-full border border-white/10 flex items-center space-x-1 uppercase tracking-wider">
             <Server className="h-2.5 w-2.5 animate-pulse text-yellow-300" />
-            <span>Cloudflare Backend Active</span>
+            <span>Secure Database Active</span>
           </div>
 
           <motion.div 
@@ -196,7 +196,7 @@ export default function LoginScreen({ storeState, onLoginSuccess, onNavigateToRe
               disabled={loading}
               className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-md shadow-indigo-100 mt-2"
             >
-              <span>{loading ? "Verifying Credentials on Pages..." : "Sign In to Cloudflare Pages"}</span>
+              <span>{loading ? "Verifying Credentials..." : "Sign In to Partner Workspace"}</span>
               <ArrowRight className="h-4 w-4" />
             </button>
           </form>

@@ -16,12 +16,16 @@ import {
   Building2,
   Trash2,
   CheckCircle,
-  FileText
+  FileText,
+  Home,
+  LayoutDashboard,
+  UserPlus,
+  ShieldAlert
 } from "lucide-react";
 
 export default function App() {
   const [storeState, setStoreState] = useState<AffiliateSystemStore>(appStore);
-  const [activeRole, setActiveRole] = useState<"admin" | "affiliate" | "join">("affiliate");
+  const [activeRole, setActiveRole] = useState<"home" | "admin" | "affiliate" | "join">("affiliate");
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   
@@ -136,7 +140,7 @@ export default function App() {
     handleRefresh();
   };
 
-  const handleRoleChange = (role: "admin" | "affiliate" | "join") => {
+  const handleRoleChange = (role: "home" | "admin" | "affiliate" | "join") => {
     setActiveRole(role);
     if (role === "join") {
       // Clear referral triggers unless preset
@@ -215,7 +219,7 @@ export default function App() {
         )}
         <footer className="bg-slate-950 text-slate-400 border-t border-slate-900 py-6 px-4 md:px-8 text-xs font-mono mt-auto relative">
           <div className="max-w-7xl mx-auto text-center text-[10px] text-slate-500 font-sans">
-            © {new Date().getFullYear()} Emmacom Digital. Fully optimized for production build on Cloudflare Pages, Workers and D1 Database.
+            © {new Date().getFullYear()} Emmacom Digital. Fully optimized for robust production cloud hosting and secure databases.
           </div>
         </footer>
         <WhatsAppSupport />
@@ -236,6 +240,59 @@ export default function App() {
             <span className="text-[10px] text-indigo-600 uppercase font-black tracking-widest block font-sans">Emmacom Digital</span>
             <span className="text-sm font-extrabold text-slate-800 tracking-tight block">Partner Commission Hub</span>
           </div>
+        </div>
+
+        {/* Dynamic Navigation Menu / Home Menu */}
+        <div className="hidden lg:flex items-center space-x-1 border border-slate-100 bg-slate-50/60 p-1 rounded-2xl" id="global-navigation-bar">
+          <button
+            onClick={() => handleRoleChange("home")}
+            className={`flex items-center space-x-1.5 py-1.5 px-3.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+              activeRole === "home" 
+                ? "bg-white text-indigo-600 shadow-xs" 
+                : "text-slate-600 hover:text-indigo-600 hover:bg-white/50"
+            }`}
+          >
+            <Home className="h-4 w-4" />
+            <span>Public Home</span>
+          </button>
+
+          <button
+            onClick={() => handleRoleChange("affiliate")}
+            className={`flex items-center space-x-1.5 py-1.5 px-3.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+              activeRole === "affiliate" 
+                ? "bg-white text-indigo-600 shadow-xs" 
+                : "text-slate-600 hover:text-indigo-600 hover:bg-white/50"
+            }`}
+          >
+            <LayoutDashboard className="h-4 w-4" />
+            <span>My Workspace</span>
+          </button>
+
+          <button
+            onClick={() => handleRoleChange("join")}
+            className={`flex items-center space-x-1.5 py-1.5 px-3.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+              activeRole === "join" 
+                ? "bg-white text-indigo-600 shadow-xs" 
+                : "text-slate-600 hover:text-indigo-600 hover:bg-white/50"
+            }`}
+          >
+            <UserPlus className="h-4 w-4" />
+            <span>Join Form Hub</span>
+          </button>
+
+          {authenticatedUser?.is_admin && (
+            <button
+              onClick={() => handleRoleChange("admin")}
+              className={`flex items-center space-x-1.5 py-1.5 px-3.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                activeRole === "admin" 
+                  ? "bg-white text-rose-600 shadow-xs border border-rose-100/50" 
+                  : "text-slate-600 hover:text-rose-600 hover:bg-white/50"
+              }`}
+            >
+              <ShieldAlert className="h-4 w-4 text-rose-500" />
+              <span>Admin HQ</span>
+            </button>
+          )}
         </div>
 
         {/* Header Right Actions */}
@@ -317,8 +374,76 @@ export default function App() {
         </div>
       </header>
 
+      {/* Mobile & Tablet Bottom / Sub Navigation Bar */}
+      <div className="lg:hidden bg-white border-b border-gray-150 py-2.5 px-4 flex items-center justify-center gap-1.5 sticky top-[73px] z-20 shadow-xs overflow-x-auto" id="mobile-sub-navbar">
+        <button
+          onClick={() => handleRoleChange("home")}
+          className={`flex items-center space-x-1 py-1.5 px-3 text-xs font-bold rounded-lg transition-all cursor-pointer shrink-0 ${
+            activeRole === "home" 
+              ? "bg-indigo-50 text-indigo-600" 
+              : "text-slate-600 hover:bg-slate-50"
+          }`}
+        >
+          <Home className="h-3.5 w-3.5" />
+          <span>Home</span>
+        </button>
+
+        <button
+          onClick={() => handleRoleChange("affiliate")}
+          className={`flex items-center space-x-1 py-1.5 px-3 text-xs font-bold rounded-lg transition-all cursor-pointer shrink-0 ${
+            activeRole === "affiliate" 
+              ? "bg-indigo-50 text-indigo-600" 
+              : "text-slate-600 hover:bg-slate-50"
+          }`}
+        >
+          <LayoutDashboard className="h-3.5 w-3.5" />
+          <span>Workspace</span>
+        </button>
+
+        <button
+          onClick={() => handleRoleChange("join")}
+          className={`flex items-center space-x-1 py-1.5 px-3 text-xs font-bold rounded-lg transition-all cursor-pointer shrink-0 ${
+            activeRole === "join" 
+              ? "bg-indigo-50 text-indigo-600" 
+              : "text-slate-600 hover:bg-slate-50"
+          }`}
+        >
+          <UserPlus className="h-3.5 w-3.5" />
+          <span>Join Form</span>
+        </button>
+
+        {authenticatedUser?.is_admin && (
+          <button
+            onClick={() => handleRoleChange("admin")}
+            className={`flex items-center space-x-1 py-1.5 px-3 text-xs font-bold rounded-lg transition-all cursor-pointer shrink-0 ${
+              activeRole === "admin" 
+                ? "bg-rose-50 text-rose-600" 
+                : "text-slate-600 hover:bg-rose-50"
+            }`}
+          >
+            <ShieldAlert className="h-3.5 w-3.5 text-rose-500" />
+            <span>Admin HQ</span>
+          </button>
+        )}
+      </div>
+
       {/* Primary content area */}
       <main className="flex-1 pb-24">
+        {activeRole === "home" && (
+          <FrontendLanding
+            onLoginClick={() => {
+              handleRoleChange("affiliate");
+            }}
+            onRegisterClick={() => {
+              handleRoleChange("join");
+            }}
+            isLoggedIn={true}
+            onGoToDashboard={() => {
+              handleRoleChange(authenticatedUser?.is_admin ? "admin" : "affiliate");
+            }}
+          />
+        )}
+
         {activeRole === "admin" && (
           <AdminDashboard
             storeState={storeState}

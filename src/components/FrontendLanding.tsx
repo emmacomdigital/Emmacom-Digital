@@ -23,9 +23,11 @@ import {
 interface FrontendLandingProps {
   onLoginClick: () => void;
   onRegisterClick: () => void;
+  isLoggedIn?: boolean;
+  onGoToDashboard?: () => void;
 }
 
-export default function FrontendLanding({ onLoginClick, onRegisterClick }: FrontendLandingProps) {
+export default function FrontendLanding({ onLoginClick, onRegisterClick, isLoggedIn, onGoToDashboard }: FrontendLandingProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
@@ -43,12 +45,12 @@ export default function FrontendLanding({ onLoginClick, onRegisterClick }: Front
     {
       id: "course-2",
       title: "Full-Stack Web & Cloud Architecture",
-      description: "Build cutting-edge fast responsive apps using React, Vite, Node, and deploy them on scalable edge container networks like Cloudflare.",
+      description: "Build cutting-edge fast responsive apps using React, Vite, Node, and deploy them on scalable modern cloud infrastructure.",
       duration: "18 Modules",
       difficulty: "Intermediate",
       icon: Layers,
       color: "from-sky-500 to-indigo-600",
-      highlights: ["React, Vite, Node runtime systems", "Serverless API integration", "Persistent cloud storage & D1 DB"]
+      highlights: ["React, Vite, Node runtime systems", "Cloud API integrations", "Persistent cloud databases"]
     },
     {
       id: "course-3",
@@ -118,7 +120,7 @@ export default function FrontendLanding({ onLoginClick, onRegisterClick }: Front
     },
     {
       question: "Can I join from anywhere in the world?",
-      answer: "Absolutely! Although database examples and base fees are displayed in Naira (₦) for local processing convenience, our masterclasses, referral networks, and cloud integrations operate worldwide on Cloudflare's serverless nodes."
+      answer: "Absolutely! Although database examples and base fees are displayed in Naira (₦) for local processing convenience, our masterclasses, referral networks, and cloud integrations are accessible worldwide on global serverless nodes."
     }
   ];
 
@@ -157,20 +159,32 @@ export default function FrontendLanding({ onLoginClick, onRegisterClick }: Front
 
             {/* CTA action buttons */}
             <div className="hidden md:flex items-center space-x-3">
-              <button
-                onClick={onLoginClick}
-                className="py-2.5 px-5 text-xs text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 font-bold rounded-xl transition-all cursor-pointer shadow-xs"
-                id="landing-navbar-login-btn"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={onRegisterClick}
-                className="py-2.5 px-5 text-xs text-white bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl transition-all cursor-pointer shadow-md shadow-indigo-150 flex items-center space-x-1.5"
-                id="landing-navbar-register-btn"
-              >
-                <span>Join & Earn 💰</span>
-              </button>
+              {isLoggedIn ? (
+                <button
+                  onClick={onGoToDashboard}
+                  className="py-2.5 px-6 text-xs text-white bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl transition-all cursor-pointer shadow-md flex items-center space-x-1.5"
+                  id="landing-navbar-dashboard-btn"
+                >
+                  <span>Go to My Dashboard 🚀</span>
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={onLoginClick}
+                    className="py-2.5 px-5 text-xs text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 font-bold rounded-xl transition-all cursor-pointer shadow-xs"
+                    id="landing-navbar-login-btn"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={onRegisterClick}
+                    className="py-2.5 px-5 text-xs text-white bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl transition-all cursor-pointer shadow-md shadow-indigo-150 flex items-center space-x-1.5"
+                    id="landing-navbar-register-btn"
+                  >
+                    <span>Join & Earn 💰</span>
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Mobile menu toggle */}
@@ -223,19 +237,30 @@ export default function FrontendLanding({ onLoginClick, onRegisterClick }: Front
               FAQs
             </a>
             <hr className="border-slate-100" />
-            <div className="grid grid-cols-2 gap-2 pt-1">
-              <button
-                onClick={() => { setMobileMenuOpen(false); onLoginClick(); }}
-                className="w-full py-2.5 text-center text-xs text-slate-700 bg-slate-50 border border-slate-200 font-bold rounded-xl transition-all cursor-pointer"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => { setMobileMenuOpen(false); onRegisterClick(); }}
-                className="w-full py-2.5 text-center text-xs text-white bg-indigo-600 font-bold rounded-xl transition-all cursor-pointer shadow-sm"
-              >
-                Join Now (₦10,000)
-              </button>
+            <div className="pt-1">
+              {isLoggedIn ? (
+                <button
+                  onClick={() => { setMobileMenuOpen(false); onGoToDashboard && onGoToDashboard(); }}
+                  className="w-full py-2.5 text-center text-xs text-white bg-indigo-600 font-bold rounded-xl transition-all cursor-pointer shadow-sm"
+                >
+                  Go to My Dashboard 🚀
+                </button>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => { setMobileMenuOpen(false); onLoginClick(); }}
+                    className="w-full py-2.5 text-center text-xs text-slate-700 bg-slate-50 border border-slate-200 font-bold rounded-xl transition-all cursor-pointer"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => { setMobileMenuOpen(false); onRegisterClick(); }}
+                    className="w-full py-2.5 text-center text-xs text-white bg-indigo-600 font-bold rounded-xl transition-all cursor-pointer shadow-sm"
+                  >
+                    Join Now (₦10,000)
+                  </button>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -257,7 +282,7 @@ export default function FrontendLanding({ onLoginClick, onRegisterClick }: Front
                 className="inline-flex items-center space-x-2 bg-indigo-50 border border-indigo-100 py-1.5 px-3 rounded-full text-indigo-700 text-xs font-bold"
               >
                 <Sparkles className="h-4 w-4 text-indigo-600 animate-pulse" />
-                <span>Authorized Cloudflare-Backboned Skill Platform</span>
+                <span>Authorized Multi-Tier Skill Acquisition Platform</span>
               </motion.div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-none font-sans uppercase">
@@ -343,10 +368,10 @@ export default function FrontendLanding({ onLoginClick, onRegisterClick }: Front
                       <span className="font-mono text-white text-xs font-bold tracking-wider">EMM1001</span>
                     </div>
                     <button
-                      onClick={onLoginClick}
+                      onClick={isLoggedIn ? onGoToDashboard : onLoginClick}
                       className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all cursor-pointer text-center block"
                     >
-                      Enter Affiliate Hub
+                      {isLoggedIn ? "Resume Active Hub 🚀" : "Enter Affiliate Hub"}
                     </button>
                   </div>
                 </div>
@@ -580,23 +605,35 @@ export default function FrontendLanding({ onLoginClick, onRegisterClick }: Front
             Start Your High-Income Journey Today
           </h2>
           <p className="text-slate-600 text-sm font-sans max-w-xl mx-auto">
-            Take premium digital masterclasses, acquire the elite license, and build a passive earning pipeline synchronized cleanly on Cloudflare servers.
+            Take premium digital masterclasses, acquire the elite license, and build a passive earning pipeline synchronized cleanly on secure cloud databases.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <button
-              onClick={onRegisterClick}
-              className="w-full sm:w-auto py-3.5 px-8 text-xs text-white bg-indigo-600 hover:bg-indigo-700 font-black rounded-xl transition-all cursor-pointer shadow-md inline-flex items-center justify-center space-x-1.5"
-            >
-              <span>Apply for License Today</span>
-              <ChevronRight className="h-4 w-4" />
-            </button>
-            <button
-              onClick={onLoginClick}
-              className="w-full sm:w-auto py-3.5 px-8 text-xs text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 font-bold rounded-xl transition-all cursor-pointer shadow-cs inline-flex items-center justify-center"
-            >
-              Partner Sign-In Area
-            </button>
+            {isLoggedIn ? (
+              <button
+                onClick={onGoToDashboard}
+                className="w-full sm:w-auto py-3.5 px-8 text-xs text-white bg-indigo-650 hover:bg-indigo-700 font-black rounded-xl transition-all cursor-pointer shadow-md inline-flex items-center justify-center space-x-2"
+              >
+                <span>Launch My Affiliate Workspace 🚀</span>
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={onRegisterClick}
+                  className="w-full sm:w-auto py-3.5 px-8 text-xs text-white bg-indigo-600 hover:bg-indigo-700 font-black rounded-xl transition-all cursor-pointer shadow-md inline-flex items-center justify-center space-x-1.5"
+                >
+                  <span>Apply for License Today</span>
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={onLoginClick}
+                  className="w-full sm:w-auto py-3.5 px-8 text-xs text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 font-bold rounded-xl transition-all cursor-pointer shadow-cs inline-flex items-center justify-center"
+                >
+                  Partner Sign-In Area
+                </button>
+              </>
+            )}
           </div>
         </div>
       </section>

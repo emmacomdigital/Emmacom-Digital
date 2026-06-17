@@ -42,8 +42,8 @@ function getGeminiClient(): GoogleGenAI | null {
 app.get("/api/health", (req, res) => {
   res.json({
     status: "healthy",
-    runtime: "Cloudflare Node Sandbox",
-    sqliteD1Binding: "active",
+    runtime: "Production Cloud Node Sandbox",
+    sqliteBinding: "active",
     geminiInitialized: Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== "MY_GEMINI_API_KEY"),
   });
 });
@@ -87,17 +87,17 @@ app.post("/api/auth/login", (req, res) => {
   return res.status(401).json({ error: "Invalid login credentials. Enter email and minimum 4 password characters." });
 });
 
-// 3. Cloudflare D1 query controller
+// 3. Database query controller
 app.post("/api/d1/execute", (req, res) => {
   const { sql, params } = req.body;
   if (!sql) {
     return res.status(451).json({ error: "No SQL statement provided." });
   }
 
-  console.log(`[Cloudflare D1 SQL Execute]: ${sql}`);
+  console.log(`[Database SQL Execute]: ${sql}`);
   return res.json({
     success: true,
-    results: [{ status: "Executed on Cloudflare D1 successfully" }],
+    results: [{ status: "Executed on database successfully" }],
     meta: {
       changed_db: true,
       changes: 1,
@@ -119,7 +119,7 @@ app.post("/api/gemini/advisor", async (req, res) => {
     // Return excellent, local smart AI suggestion list if key is not configured yet
     const systemOfflineAnalysis = `👋 Hello ${userName}! 
 
-I am your local Cloudflare-hosted **AI Affiliate Smart Coach**. 
+I am your local cloud-hosted **AI Affiliate Smart Coach**. 
 
 *Since your live Gemini Key is not set up under parameters yet, here is your instant tailored growth overview*:
 - **Earnings Optimization**: You currently have ₦${(earnings || 0).toLocaleString()} in lifetime partner commission credits. Keep driving organic conversions to surpass your targets!
@@ -214,7 +214,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Full-Stack Cloudflare Sandbox Server running on http://localhost:${PORT}`);
+    console.log(`Full-Stack Cloud Sandbox Server running on http://localhost:${PORT}`);
   });
 }
 

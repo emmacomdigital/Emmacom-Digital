@@ -22,7 +22,6 @@ import {
   Copy,
   ExternalLink
 } from "lucide-react";
-import { CLOUDFLARE_D1_SQL_SCHEMA, CLOUDFLARE_BINDING_GUIDE } from "../lib/cloudflare";
 
 interface AdminDashboardProps {
   storeState: AffiliateSystemStore;
@@ -41,8 +40,6 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
   const [flutterwaveAccountNumber, setFlutterwaveAccountNumber] = useState(storeState.config.flutterwave_account_number || "0048127392");
   const [flutterwaveAccountName, setFlutterwaveAccountName] = useState(storeState.config.flutterwave_account_name || "Emmacom Digital Hub / Flutterwave");
   const [configSuccess, setConfigSuccess] = useState(false);
-  const [copiedSql, setCopiedSql] = useState(false);
-  const [copiedGuide, setCopiedGuide] = useState(false);
 
   // Modal / Input values for payout resolution
   const [resolvingWthId, setResolvingWthId] = useState<string | null>(null);
@@ -321,93 +318,6 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                 Apply Parameters
               </button>
             </form>
-          </div>
-
-          {/* Section: Cloudflare Ecosystem & D1 Database Integration Settings */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
-            <div className="flex items-center justify-between col-span-12">
-              <h3 className="text-lg font-bold text-slate-900 flex items-center space-x-2">
-                <Cloud className="h-5 w-5 text-sky-500 animate-pulse" />
-                <span>Cloudflare & D1 Integration</span>
-              </h3>
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold border flex items-center space-x-1.5 bg-sky-50 text-sky-700 border-sky-200">
-                <span className="h-1.5 w-1.5 rounded-full bg-sky-500"></span>
-                <span>D1 ENGINE STANDBY</span>
-              </span>
-            </div>
-
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Emmacom Digital platform is pre-optimized to run on <strong>Cloudflare Pages (frontend compiles to static)</strong>, 
-              <strong> Cloudflare Workers (APIs)</strong>, and a serverless <strong>Cloudflare D1 SQL database</strong> instance.
-            </p>
-
-            <div className="bg-slate-50 rounded-xl border border-slate-150 p-4 space-y-2.5">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center space-x-1">
-                <Database className="h-3 w-3 text-sky-600" />
-                <span>D1 SQLite Table Models Schema</span>
-              </div>
-              <p className="text-[11px] text-slate-500 leading-normal">
-                To provision tables instantly inside your Cloudflare D1 environment, copy this optimized transaction-compliant SQL schema script:
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(CLOUDFLARE_D1_SQL_SCHEMA);
-                  setCopiedSql(true);
-                  setTimeout(() => setCopiedSql(false), 2000);
-                }}
-                className={`w-full py-2.5 px-3 rounded-lg border font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                  copiedSql
-                    ? "bg-emerald-600 border-emerald-500 text-white"
-                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-55"
-                }`}
-              >
-                <Copy className="h-3.5 w-3.5" />
-                <span>{copiedSql ? "✓ Copied D1 Script!" : "Copy Cloudflare D1 SQLite Schema"}</span>
-              </button>
-            </div>
-
-            <div className="bg-slate-50 rounded-xl border border-slate-150 p-4 space-y-2.5">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center space-x-1">
-                <Cloud className="h-3 w-3 text-amber-600" />
-                <span>Wrangler Binding Settings Schema</span>
-              </div>
-              <p className="text-[11px] text-slate-500 leading-normal">
-                Bind your Cloudflare D1 SQLite storage instance securely using your wrangler settings schema block:
-              </p>
-              <div className="font-mono text-[10px] bg-slate-900 text-slate-100 p-2.5 rounded-lg border border-slate-800 space-y-1">
-                <div className="text-yellow-400 font-bold">[[d1_databases]]</div>
-                <div>binding = <span className="text-green-400">"DB"</span></div>
-                <div>database_name = <span className="text-green-400">"emmacom-affiliate-db"</span></div>
-                <div>database_id = <span className="text-slate-400">"your-d1-instance-guid"</span></div>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(CLOUDFLARE_BINDING_GUIDE);
-                  setCopiedGuide(true);
-                  setTimeout(() => setCopiedGuide(false), 2000);
-                }}
-                className={`w-full py-2.5 px-3 rounded-lg border font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                  copiedGuide
-                    ? "bg-emerald-600 border-emerald-550 text-white"
-                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-55"
-                }`}
-              >
-                <Copy className="h-3.5 w-3.5" />
-                <span>{copiedGuide ? "✓ Copied Bind Settings!" : "Copy Wrangler Setup Settings"}</span>
-              </button>
-            </div>
-            
-            <a 
-              href="https://dash.cloudflare.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-[11px] text-indigo-600 font-bold hover:underline flex items-center space-x-1 justify-center pt-1"
-            >
-              <span>Go to Cloudflare Console Dashboard</span>
-              <ExternalLink className="h-3 w-3" />
-            </a>
           </div>
 
           {/* Table: Payout approvals */}
