@@ -1171,6 +1171,19 @@ export class AffiliateSystemStore {
     this.saveAll();
   }
 
+  // Update Admin Profile (Email & Password)
+  public updateAdminProfile(email: string, password?: string): void {
+    const admin = this.users.find(u => u.is_admin === true);
+    if (admin) {
+      admin.email = email.trim().toLowerCase();
+      if (password) {
+        admin.password = password;
+      }
+      this.addAuditLog("USR_ADMIN", "Admin profile updated", `Admin credentials updated email to ${email} and set a unique password.`);
+      this.saveAll();
+    }
+  }
+
   // Read utilities
   public getUserByAffiliate(affid: string): UserProfile | undefined {
     const affiliate = this.affiliates.find(a => a.affiliate_id === affid);

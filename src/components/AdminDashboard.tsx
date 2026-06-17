@@ -41,10 +41,34 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
   const [flutterwaveAccountName, setFlutterwaveAccountName] = useState(storeState.config.flutterwave_account_name || "Emmacom Digital Hub / Flutterwave");
   const [configSuccess, setConfigSuccess] = useState(false);
 
+  // Admin Profile Settings State
+  const adminProfile = storeState.users.find(u => u.is_admin === true);
+  const [adminEmail, setAdminEmail] = useState(adminProfile?.email || "admin@emmacomdigital.com");
+  const [adminPassword, setAdminPassword] = useState(adminProfile?.password || "emmacom2026");
+  const [profileSuccess, setProfileSuccess] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
+
   // Modal / Input values for payout resolution
   const [resolvingWthId, setResolvingWthId] = useState<string | null>(null);
   const [resolutionAction, setResolutionAction] = useState<"approve" | "reject">("approve");
   const [resolutionNote, setResolutionNote] = useState("");
+
+  const handleSaveProfile = (e: FormEvent) => {
+    e.preventDefault();
+    if (!adminEmail.trim()) {
+      setProfileError("Email cannot be empty.");
+      return;
+    }
+    if (adminPassword.length < 4) {
+      setProfileError("Password must possess at least 4 characters.");
+      return;
+    }
+    storeState.updateAdminProfile(adminEmail.trim(), adminPassword);
+    setProfileSuccess(true);
+    setProfileError(null);
+    onRefresh();
+    setTimeout(() => setProfileSuccess(false), 4000);
+  };
 
   const handleSaveConfig = (e: FormEvent) => {
     e.preventDefault();
@@ -316,6 +340,61 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                 className="w-full bg-indigo-600 hover:bg-slate-900 text-white text-xs font-bold py-3.5 px-4 rounded-xl shadow-md transition-colors uppercase tracking-wider cursor-pointer font-sans"
               >
                 Apply Parameters
+              </button>
+            </form>
+          </div>
+
+          {/* Form: Admin Login Profile Settings */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center space-x-2">
+              <Unlock className="h-4.5 w-4.5 text-indigo-600 shrink-0" />
+              <span>Admin Login Profile</span>
+            </h3>
+
+            {profileSuccess && (
+              <div className="mb-4 p-3 bg-emerald-50 border-l-4 border-emerald-500 rounded text-emerald-800 text-xs font-semibold leading-relaxed">
+                ✓ Admin credentials updated successfully! Log in next time with these new details.
+              </div>
+            )}
+
+            {profileError && (
+              <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 rounded text-rose-800 text-xs font-semibold leading-relaxed">
+                ⚠️ {profileError}
+              </div>
+            )}
+
+            <form onSubmit={handleSaveProfile} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Admin Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  placeholder="admin@emmacomdigital.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Unique Admin Password</label>
+                <input
+                  type="password"
+                  required
+                  minLength={4}
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
+                  placeholder="Set unique secure password"
+                />
+                <span className="text-[10px] text-slate-450 mt-1.5 block leading-normal">Minimum 4 characters. Enforces a real password lock instead of accepting arbitrary password entries.</span>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-3.5 px-4 rounded-xl shadow-md transition-colors uppercase tracking-wider cursor-pointer font-sans"
+              >
+                Save Login Credentials
               </button>
             </form>
           </div>

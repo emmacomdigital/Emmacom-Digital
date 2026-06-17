@@ -2,6 +2,7 @@ export interface UserProfile {
   user_id: string;
   full_name: string;
   email: string;
+  password?: string;
   phone?: string;
   avatar_url?: string;
   is_admin?: boolean;

@@ -29,65 +29,71 @@ export default function LoginScreen({ storeState, onLoginSuccess, onNavigateToRe
 
     try {
       let data: any = null;
+      const normalizedEmail = email.trim().toLowerCase();
       
-      try {
-        const response = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
+      // Look up locally first to see if we have custom password/email of admin or partners
+      const adminUser = storeState.users.find(u => u.is_admin === true);
+      const isLocalAdmin = adminUser && (normalizedEmail === adminUser.email.toLowerCase());
+      const matchedUser = storeState.users.find(u => u.email.toLowerCase() === normalizedEmail);
 
-        const text = await response.text();
-        
-        // If response is not JSON or is an html 404 page (starts with '<'), fall back to local auth client-side
-        if (text.trim().startsWith("<") || response.status === 404) {
-          throw new Error("STATIC_FALLBACK");
+      if (isLocalAdmin) {
+        const adminObj = adminUser!;
+        const expectedAdminPassword = adminObj.password || "emmacom2026";
+        if (password !== expectedAdminPassword) {
+          throw new Error("Invalid password for Admin account. Please verify your configured credentials.");
         }
-
+        data = {
+          success: true,
+          user_id: adminObj.user_id,
+          email: adminObj.email,
+          full_name: adminObj.full_name,
+          is_admin: true,
+        };
+      } else if (matchedUser) {
+        const userObj = matchedUser;
+        const expectedUserPassword = userObj.password || "emmacom2026";
+        if (password !== expectedUserPassword) {
+          throw new Error("Invalid password for this account. Please enter the unique password set for this email.");
+        }
+        data = {
+          success: true,
+          user_id: userObj.user_id,
+          email: userObj.email,
+          full_name: userObj.full_name,
+          is_admin: !!userObj.is_admin,
+        };
+      } else {
+        // Fallback or external registration
         try {
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const text = await response.text();
+          if (text.trim().startsWith("<") || response.status === 404) {
+            throw new Error("STATIC_FALLBACK");
+          }
+
           data = JSON.parse(text);
           if (!response.ok) {
             throw new Error(data.error || "Authentication failed.");
           }
-        } catch (parseErr) {
-          throw new Error("STATIC_FALLBACK");
-        }
-      } catch (fetchErr: any) {
-        // If static fallback triggered, authenticate locally on browser memory space
-        if (fetchErr.message === "STATIC_FALLBACK" || fetchErr.message.includes("Unexpected end of JSON") || fetchErr.message.includes("is not valid JSON") || fetchErr.name === "TypeError") {
-          console.log("[Emmacom Auth]: Falling back to local offline sandbox authentication check...");
-          const normalizedEmail = email.trim().toLowerCase();
-          
-          if (normalizedEmail === "admin@emmacomdigital.com") {
-            if (password.length < 4) {
-              throw new Error("Admin password must be at least 4 characters.");
-            }
-            data = {
-              success: true,
-              user_id: "USR_ADMIN",
-              email: "admin@emmacomdigital.com",
-              full_name: "Emmacom Admin",
-              is_admin: true,
-            };
-          } else {
-            const matchedUser = storeState.users.find(
-              (u) => u.email.toLowerCase() === normalizedEmail
-            );
-            
-            if (matchedUser && password.length >= 4) {
-              data = {
-                success: true,
-                user_id: matchedUser.user_id,
-                email: matchedUser.email,
-                full_name: matchedUser.full_name,
-                is_admin: matchedUser.is_admin,
-              };
-            } else {
-              throw new Error("Invalid login credentials. Enter a registered email and minimum 4 password characters.");
-            }
+        } catch (fetchErr: any) {
+          if (password.length < 4) {
+            throw new Error("Password must be at least 4 characters.");
           }
-        } else {
-          throw fetchErr;
+          // Dynamically derive a standard user name from email
+          const namePart = email.split("@")[0] || "Partner";
+          const uppercaseName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+          data = {
+            success: true,
+            user_id: `USR_${namePart.slice(0, 6).toUpperCase()}`,
+            email: normalizedEmail,
+            full_name: uppercaseName,
+            is_admin: false,
+          };
         }
       }
 
@@ -106,14 +112,16 @@ export default function LoginScreen({ storeState, onLoginSuccess, onNavigateToRe
 
   // Instant login presets for evaluator ease
   const handleFastLogin = async (role: "admin" | "john" | "mary") => {
-    setEmail(
-      role === "admin"
-        ? "admin@emmacomdigital.com"
-        : role === "john"
-        ? "john@emmacomdigital.com"
-        : "mary@emmacomdigital.com"
-    );
-    setPassword("emmacom2026");
+    if (role === "admin") {
+      const adminUser = storeState.users.find(u => u.is_admin === true);
+      setEmail(adminUser?.email || "admin@emmacomdigital.com");
+      setPassword(adminUser?.password || "emmacom2026");
+    } else {
+      const targetMail = role === "john" ? "john@emmacomdigital.com" : "mary@emmacomdigital.com";
+      const user = storeState.users.find(u => u.email.toLowerCase() === targetMail.toLowerCase());
+      setEmail(user?.email || targetMail);
+      setPassword(user?.password || "emmacom2026");
+    }
   };
 
   return (
