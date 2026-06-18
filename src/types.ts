@@ -78,6 +78,18 @@ export interface AdminConfig {
   flutterwave_bank_name?: string;
   flutterwave_account_number?: string;
   flutterwave_account_name?: string;
+  
+  // Dynamic website page copy customization (CMS options)
+  homepage_hero_title?: string;
+  homepage_hero_subtitle?: string;
+  homepage_badge_text?: string;
+  join_page_title?: string;
+  join_page_subtitle?: string;
+  join_badge_text?: string;
+  intro_video_url?: string;
+  
+  // Custom FAQs
+  faqs?: { id: string; question: string; answer: string; }[];
 }
 
 export interface AppNotification {

@@ -70,24 +70,7 @@ export default function FrontendLanding({
     }
   ];
 
-  const faqs = [
-    {
-      question: "What is Emmacom Digital Academy and how does the affiliate program work?",
-      answer: "Emmacom Digital Academy is an elite skill and digital assets hub. Members pay a one-time registration fee to unlock comprehensive premium digital products, high-ticket masterclasses, and pre-formatted marketing assets. Once registered, you obtain an authorized affiliate partner license, allowing you to recruit others using your link and earn both immediate registration commissions (20%) and recurring passive rewards."
-    },
-    {
-      question: "Is there a monthly commitment required to keep my affiliate status active?",
-      answer: "Yes, to ensure high system integrity and support the ongoing development of the community, partners contribute a monthly platform maintenance compliance fee (₦5,000). Active contributions are required to remain eligible to withdraw earnings and generate recurring commissions from your referred partners' actions."
-    },
-    {
-      question: "How do I request a withdrawal and when do I get paid?",
-      answer: "When your wallet reaches the minimum withdrawable balance (₦2,000), you can enter your local bank name and account details directly in your Affiliate Dashboard. Once requested, admin reviews and clears your funds instantly, which are processed with complete audit trails to your bank."
-    },
-    {
-      question: "Can I join from anywhere in the world?",
-      answer: "Absolutely! Although database examples and base fees are displayed in Naira (₦) for local processing convenience, our masterclasses, referral networks, and cloud integrations are accessible worldwide on global serverless nodes."
-    }
-  ];
+  const faqs = storeState.config.faqs || [];
 
   return (
     <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans selection:bg-indigo-500 selection:text-white antialiased" id="emmacom-public-landing">
@@ -247,19 +230,15 @@ export default function FrontendLanding({
                 className="inline-flex items-center space-x-2 bg-indigo-50 border border-indigo-100 py-1.5 px-3 rounded-full text-indigo-700 text-xs font-bold"
               >
                 <Sparkles className="h-4 w-4 text-indigo-600 animate-pulse" />
-                <span>Authorized Multi-Tier Skill Acquisition Platform</span>
+                <span>{storeState.config.homepage_badge_text || "Authorized Multi-Tier Skill Acquisition Platform"}</span>
               </motion.div>
-
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-none font-sans uppercase">
-                Acquire High-Income Skills. <br className="hidden sm:inline" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700">
-                  Earn Uncapped Commissions.
-                </span>
+              
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-none font-sans uppercase">
+                {storeState.config.homepage_hero_title || "Acquire High-Income Skills. Earn Uncapped Commissions."}
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-sans leading-relaxed">
-                Emmacom Digital Academy combines elite masterclasses in full-stack cloud dev, organic growth hacks, and funnels structure with a real-time high-performance single-tier 
-                affiliate distribution platform.
+                {storeState.config.homepage_hero_subtitle || "Emmacom Digital Academy combines elite masterclasses in full-stack cloud dev, organic growth hacks, and funnels structure with a real-time high-performance single-tier affiliate distribution platform."}
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3">

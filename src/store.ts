@@ -304,7 +304,39 @@ const DEFAULT_CONFIG: AdminConfig = {
   minimum_withdrawal: 2000, // ₦2000
   flutterwave_bank_name: "Wema Bank (FW)",
   flutterwave_account_number: "0048127392",
-  flutterwave_account_name: "Emmacom Digital Academy Hub / Flutterwave"
+  flutterwave_account_name: "Emmacom Digital Academy Hub / Flutterwave",
+  
+  // Custom CMS page content defaults
+  homepage_hero_title: "Acquire High-Income Skills. Earn Uncapped Commissions.",
+  homepage_hero_subtitle: "Emmacom Digital Academy combines elite masterclasses in full-stack cloud dev, organic growth hacks, and funnels structure with a real-time high-performance single-tier affiliate distribution platform.",
+  homepage_badge_text: "Authorized Multi-Tier Skill Acquisition Platform",
+  join_page_title: "Join Emmacom Digital Academy Affiliate Program",
+  join_page_subtitle: "Sign up to unlock professional digital products, premium marketing assets, member privileges, and start earning recurring single-level commissions.",
+  join_badge_text: "Emmacom Digital Academy Onboarding",
+  intro_video_url: "https://www.youtube.com/embed/13dXWhffS98",
+  
+  faqs: [
+    {
+      id: "faq-1",
+      question: "What is Emmacom Digital Academy and how does the affiliate program work?",
+      answer: "Emmacom Digital Academy is an elite skill and digital assets hub. Members pay a one-time registration fee to unlock comprehensive premium digital products, high-ticket masterclasses, and pre-formatted marketing assets. Once registered, you obtain an authorized affiliate partner license, allowing you to recruit others using your link and earn both immediate registration commissions (20%) and recurring passive rewards."
+    },
+    {
+      id: "faq-2",
+      question: "Is there a monthly commitment required to keep my affiliate status active?",
+      answer: "Yes, to ensure high system integrity and support the ongoing development of the community, partners contribute a monthly platform maintenance compliance fee (₦5,000). Active contributions are required to remain eligible to withdraw earnings and generate recurring commissions from your referred partners' actions."
+    },
+    {
+      id: "faq-3",
+      question: "How do I request a withdrawal and when do I get paid?",
+      answer: "When your wallet reaches the minimum withdrawable balance (₦2,000), you can enter your local bank name and account details directly in your Affiliate Dashboard. Once requested, admin reviews and clears your funds instantly, which are processed with complete audit trails to your bank."
+    },
+    {
+      id: "faq-4",
+      question: "Can I join from anywhere in the world?",
+      answer: "Absolutely! Although database examples and base fees are displayed in Naira (₦) for local processing convenience, our masterclasses, referral networks, and cloud integrations are accessible worldwide on global serverless nodes."
+    }
+  ]
 };
 
 const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
@@ -445,7 +477,7 @@ export class AffiliateSystemStore {
     this.donations = loadFromStorage<Donation[]>("emmacom_donations", SEED_DONATIONS);
     this.commissions = loadFromStorage<Commission[]>("emmacom_commissions", SEED_COMMISSIONS);
     this.withdrawals = loadFromStorage<Withdrawal[]>("emmacom_withdrawals", SEED_WITHDRAWALS);
-    this.config = loadFromStorage<AdminConfig>("emmacom_config", DEFAULT_CONFIG);
+    this.config = { ...DEFAULT_CONFIG, ...loadFromStorage<AdminConfig>("emmacom_config", DEFAULT_CONFIG) };
     this.notifications = loadFromStorage<AppNotification[]>("emmacom_notifications", SEED_NOTIFICATIONS);
     this.auditLogs = loadFromStorage<AuditLog[]>("emmacom_logs", SEED_AUDIT_LOGS);
     this.systemDate = loadFromStorage<string>("emmacom_system_date", "2026-06-13T10:00:00Z");

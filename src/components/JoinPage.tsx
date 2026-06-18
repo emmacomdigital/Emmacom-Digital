@@ -108,18 +108,41 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
     }, 2000);
   };
 
+  // Helper to standardise YouTube embed link
+  const getEmbedUrl = (rawUrl: string): string => {
+    if (!rawUrl) return "https://www.youtube.com/embed/13dXWhffS98?autoplay=1&loop=1&playlist=13dXWhffS98&controls=1&rel=0&showinfo=0";
+    let videoId = "";
+    if (rawUrl.includes("embed/")) {
+      const parts = rawUrl.split("embed/");
+      if (parts[1]) {
+        videoId = parts[1].split("?")[0];
+      }
+    } else if (rawUrl.includes("watch?v=")) {
+      videoId = rawUrl.split("watch?v=")[1]?.split("&")[0];
+    } else if (rawUrl.includes("youtu.be/")) {
+      videoId = rawUrl.split("youtu.be/")[1]?.split("?")[0];
+    }
+    
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&controls=1&rel=0&showinfo=0`;
+    }
+    return rawUrl;
+  };
+
+  const videoSrc = getEmbedUrl(storeState.config.intro_video_url || "https://www.youtube.com/embed/13dXWhffS98");
+
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8 font-sans" id="join-page-container">
       {/* Visual Header */}
       <div className="text-center mb-8">
         <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
-          Emmacom Digital Academy Onboarding
+          {storeState.config.join_badge_text || "Emmacom Digital Academy Onboarding"}
         </span>
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mt-3">
-          Join Emmacom Digital Academy Affiliate Program
+          {storeState.config.join_page_title || "Join Emmacom Digital Academy Affiliate Program"}
         </h1>
         <p className="text-gray-600 mt-2 max-w-xl mx-auto text-sm md:text-base">
-          Sign up to unlock professional digital products, premium marketing assets, member privileges, and start earning recurring single-level commissions.
+          {storeState.config.join_page_subtitle || "Sign up to unlock professional digital products, premium marketing assets, member privileges, and start earning recurring single-level commissions."}
         </p>
       </div>
 
@@ -131,8 +154,8 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
         </div>
         <div className="aspect-video w-full rounded-xl overflow-hidden relative shadow-inner">
           <iframe 
-            src="https://www.youtube.com/embed/13dXWhffS98?autoplay=1&loop=1&playlist=13dXWhffS98&controls=1&rel=0&showinfo=0"
-            title="Emmacom Digital Academy Program Intro Video"
+            src={videoSrc}
+            title={`${storeState.config.join_page_title || "Emmacom Digital Academy"} Program Intro Video`}
             className="absolute inset-0 w-full h-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

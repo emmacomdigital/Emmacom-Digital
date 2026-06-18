@@ -22,7 +22,8 @@ import {
   Copy,
   ExternalLink,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Sparkles
 } from "lucide-react";
 
 interface AdminDashboardProps {
@@ -49,6 +50,17 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
   const [adminPassword, setAdminPassword] = useState(adminProfile?.password || "emmacom2026");
   const [profileSuccess, setProfileSuccess] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
+
+  // Website Copy CMS & FAQ states
+  const [homepageHeroTitle, setHomepageHeroTitle] = useState(storeState.config.homepage_hero_title || "");
+  const [homepageHeroSubtitle, setHomepageHeroSubtitle] = useState(storeState.config.homepage_hero_subtitle || "");
+  const [homepageBadgeText, setHomepageBadgeText] = useState(storeState.config.homepage_badge_text || "");
+  const [joinPageTitle, setJoinPageTitle] = useState(storeState.config.join_page_title || "");
+  const [joinPageSubtitle, setJoinPageSubtitle] = useState(storeState.config.join_page_subtitle || "");
+  const [joinBadgeText, setJoinBadgeText] = useState(storeState.config.join_badge_text || "");
+  const [introVideoUrl, setIntroVideoUrl] = useState(storeState.config.intro_video_url || "");
+  const [faqs, setFaqs] = useState(storeState.config.faqs || []);
+  const [cmsSuccess, setCmsSuccess] = useState(false);
 
   // Premium Products Editor State
   const initialProductId = storeState.premiumProducts && storeState.premiumProducts[0] ? storeState.premiumProducts[0].id : "p-1";
@@ -235,6 +247,44 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
     setConfigSuccess(true);
     onRefresh();
     setTimeout(() => setConfigSuccess(false), 3000);
+  };
+
+  const handleAddFaq = () => {
+    const newFaq = {
+      id: `faq-${Date.now()}`,
+      question: "Frequently Asked Question Topic?",
+      answer: "Descriptive structured response to assist partner inquiries."
+    };
+    setFaqs([...faqs, newFaq]);
+  };
+
+  const handleUpdateFaq = (index: number, field: "question" | "answer", value: string) => {
+    const updated = [...faqs];
+    updated[index] = { ...updated[index], [field]: value };
+    setFaqs(updated);
+  };
+
+  const handleDeleteFaq = (index: number) => {
+    const updated = faqs.filter((_, idx) => idx !== index);
+    setFaqs(updated);
+  };
+
+  const handleSaveCmsConfig = (e: FormEvent) => {
+    e.preventDefault();
+    storeState.updateAdminConfig({
+      ...storeState.config,
+      homepage_hero_title: homepageHeroTitle,
+      homepage_hero_subtitle: homepageHeroSubtitle,
+      homepage_badge_text: homepageBadgeText,
+      join_page_title: joinPageTitle,
+      join_page_subtitle: joinPageSubtitle,
+      join_badge_text: joinBadgeText,
+      intro_video_url: introVideoUrl,
+      faqs: faqs
+    });
+    setCmsSuccess(true);
+    onRefresh();
+    setTimeout(() => setCmsSuccess(false), 3000);
   };
 
   const handleResolveWithdrawal = (e: FormEvent) => {
@@ -490,6 +540,182 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
               >
                 Apply Parameters
               </button>
+            </form>
+          </div>
+
+          {/* Form: Website CMS & FAQs Content Manager */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-6" id="cms-configuration-card">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                <Sparkles className="h-5 w-5 text-indigo-600" />
+                <span>Website Copy & FAQ Builder</span>
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Customize landing copy, Onboarding page descriptions, manage FAQs, and replace the YouTube intro video.
+              </p>
+            </div>
+
+            {cmsSuccess && (
+              <div className="p-3 bg-emerald-50 border-l-4 border-emerald-500 rounded text-emerald-800 text-xs font-semibold">
+                ✓ Website copy options and FAQs list saved and updated dynamically!
+              </div>
+            )}
+
+            <form onSubmit={handleSaveCmsConfig} className="space-y-5">
+              
+              {/* Homepage settings */}
+              <div className="space-y-3.5 border-b border-slate-100 pb-5">
+                <h4 className="text-xs font-black text-rose-600 uppercase tracking-widest px-1">Homepage (Landing View)</h4>
+                
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 px-0.5">Homepage Badge Promo Text</label>
+                  <input
+                    type="text"
+                    value={homepageBadgeText}
+                    onChange={(e) => setHomepageBadgeText(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-sans"
+                    placeholder="e.g. Authorized Multi-Tier Skill Acquisition Platform"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 px-0.5">Homepage Hero Title</label>
+                  <textarea
+                    rows={2}
+                    value={homepageHeroTitle}
+                    onChange={(e) => setHomepageHeroTitle(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-sans leading-relaxed"
+                    placeholder="Main headline display text"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 px-0.5">Homepage Hero Subtitle / Description</label>
+                  <textarea
+                    rows={3}
+                    value={homepageHeroSubtitle}
+                    onChange={(e) => setHomepageHeroSubtitle(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-sans leading-relaxed"
+                    placeholder="Describe academy benefits"
+                  />
+                </div>
+              </div>
+
+              {/* Join Onboarding copy settings */}
+              <div className="space-y-3.5 border-b border-slate-100 pb-5">
+                <h4 className="text-xs font-black text-amber-600 uppercase tracking-widest px-1">Join Affiliate (Onboarding View)</h4>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 px-0.5">Join Onboarding Badge Text</label>
+                  <input
+                    type="text"
+                    value={joinBadgeText}
+                    onChange={(e) => setJoinBadgeText(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-sans"
+                    placeholder="Onboarding section badge"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 px-0.5">Join Onboarding Main Title</label>
+                  <input
+                    type="text"
+                    value={joinPageTitle}
+                    onChange={(e) => setJoinPageTitle(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-sans"
+                    placeholder="Join Program Header Title"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 px-0.5">Join Onboarding Description</label>
+                  <textarea
+                    rows={2}
+                    value={joinPageSubtitle}
+                    onChange={(e) => setJoinPageSubtitle(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-sans leading-relaxed"
+                    placeholder="Describe rewards and fees rules on onboarding landing page"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 px-0.5">YouTube Program Intro Video URL / ID</label>
+                  <input
+                    type="text"
+                    value={introVideoUrl}
+                    onChange={(e) => setIntroVideoUrl(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    placeholder="e.g. https://www.youtube.com/watch?v=13dXWhffS98 or embed link"
+                  />
+                  <span className="block text-[9px] text-slate-400 font-sans leading-normal mt-1.5 px-0.5">
+                    💡 Accepts standard links, share addresses, or secure embedding pathways automatically.
+                  </span>
+                </div>
+              </div>
+
+              {/* Editable FAQ accordion settings list */}
+              <div className="space-y-3.5">
+                <div className="flex items-center justify-between px-1">
+                  <h4 className="text-xs font-black text-indigo-700 uppercase tracking-widest">Frequently Answered Questions (FAQs)</h4>
+                  <button
+                    type="button"
+                    onClick={handleAddFaq}
+                    className="text-[10px] font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 py-1 px-2.5 rounded-lg transition-colors cursor-pointer"
+                  >
+                    + Add Question
+                  </button>
+                </div>
+
+                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1 border border-slate-100/60 p-2.5 rounded-xl bg-slate-50/50">
+                  {faqs.length === 0 ? (
+                    <p className="text-[11px] text-gray-400 text-center font-sans py-4">No FAQ entries yet. Click "+ Add Question" above to insert.</p>
+                  ) : (
+                    faqs.map((faq, idx) => (
+                      <div key={faq.id || idx} className="bg-white p-3 rounded-lg border border-slate-100/60 shadow-xs relative space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[9px] font-bold text-indigo-500 font-mono font-sans capitalize">FAQ Card #{idx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteFaq(idx)}
+                            className="text-[9px] font-bold text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100/80 px-1.5 py-0.5 rounded transition-colors"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                        <div>
+                          <input
+                            type="text"
+                            value={faq.question}
+                            onChange={(e) => handleUpdateFaq(idx, "question", e.target.value)}
+                            className="w-full text-xs px-2.5 py-1.5 rounded border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-bold text-slate-700"
+                            placeholder="FAQ Question Theme"
+                          />
+                        </div>
+                        <div>
+                          <textarea
+                            rows={3}
+                            value={faq.answer}
+                            onChange={(e) => handleUpdateFaq(idx, "answer", e.target.value)}
+                            className="w-full text-[11px] px-2.5 py-1.5 rounded border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-slate-600 leading-normal"
+                            placeholder="FAQ Resolution write-up"
+                          />
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  className="w-full bg-slate-900 hover:bg-indigo-700 text-white text-xs font-bold py-3.5 px-4 rounded-xl shadow-md transition-colors uppercase tracking-wider cursor-pointer font-sans text-center"
+                  id="save-cms-copy-btn"
+                >
+                  Save Homepage & FAQ Changes
+                </button>
+              </div>
+
             </form>
           </div>
 
