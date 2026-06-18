@@ -557,7 +557,7 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                     value={prodName}
                     onChange={(e) => setProdName(e.target.value)}
                     className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    placeholder="Enter course or guide name"
+                    placeholder="Enter digital product or guide name"
                   />
                 </div>
 
