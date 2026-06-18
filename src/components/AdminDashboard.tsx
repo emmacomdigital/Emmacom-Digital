@@ -38,7 +38,7 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
   const [minimumWithdrawal, setMinimumWithdrawal] = useState(storeState.config.minimum_withdrawal);
   const [flutterwaveBankName, setFlutterwaveBankName] = useState(storeState.config.flutterwave_bank_name || "Wema Bank (FW)");
   const [flutterwaveAccountNumber, setFlutterwaveAccountNumber] = useState(storeState.config.flutterwave_account_number || "0048127392");
-  const [flutterwaveAccountName, setFlutterwaveAccountName] = useState(storeState.config.flutterwave_account_name || "Emmacom Digital Hub / Flutterwave");
+  const [flutterwaveAccountName, setFlutterwaveAccountName] = useState(storeState.config.flutterwave_account_name || "Emmacomdigital Courses Hub / Flutterwave");
   const [configSuccess, setConfigSuccess] = useState(false);
 
   // Admin Profile Settings State

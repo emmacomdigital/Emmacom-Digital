@@ -146,7 +146,7 @@ export default function LoginScreen({ storeState, onLoginSuccess, onNavigateToRe
           >
             <Cloud className="h-6 w-6 text-sky-200" />
           </motion.div>
-          <h2 className="text-xl font-black tracking-tight dialog-title uppercase font-sans">Emmacom Digital</h2>
+          <h2 className="text-xl font-black tracking-tight dialog-title uppercase font-sans">Emmacomdigital Courses</h2>
           <p className="text-xs text-indigo-100 font-medium">Partner Commission Hub</p>
         </div>
 

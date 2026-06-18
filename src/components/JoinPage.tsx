@@ -69,7 +69,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
       (u) => u.email.toLowerCase() === email.trim().toLowerCase()
     );
     if (exists) {
-      setErrorMsg("This email address is already registered on Emmacom Digital.");
+      setErrorMsg("This email address is already registered on Emmacomdigital Courses.");
       return;
     }
 
@@ -113,10 +113,10 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
       {/* Visual Header */}
       <div className="text-center mb-8">
         <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
-          Emmacom Digital Onboarding
+          Emmacomdigital Courses Onboarding
         </span>
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mt-3">
-          Join Emmacom Affiliate Program
+          Join Emmacomdigital Courses Affiliate Program
         </h1>
         <p className="text-gray-600 mt-2 max-w-xl mx-auto text-sm md:text-base">
           Sign up to unlock professional digital products, premium marketing assets, member privileges, and start earning recurring single-level commissions.
@@ -132,7 +132,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
         <div className="aspect-video w-full rounded-xl overflow-hidden relative shadow-inner">
           <iframe 
             src="https://www.youtube.com/embed/13dXWhffS98?autoplay=1&loop=1&playlist=13dXWhffS98&controls=1&rel=0&showinfo=0"
-            title="Emmacom Digital Program Intro Video"
+            title="Emmacomdigital Courses Program Intro Video"
             className="absolute inset-0 w-full h-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -272,7 +272,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
               <div className="flex items-start space-x-2.5 text-xs text-gray-500 leading-relaxed">
                 <input type="checkbox" required defaultChecked className="mt-1 h-3.5 w-3.5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                 <span>
-                  I agree to Emmacom Digital's terms of service, partner affiliate policies, and authorize the mock signup fee. I understand ongoing compliance requires recurring ₦{storeState.config.monthly_donation_amount.toLocaleString()} payments.
+                  I agree to Emmacomdigital Courses' terms of service, partner affiliate policies, and authorize the mock signup fee. I understand ongoing compliance requires recurring ₦{storeState.config.monthly_donation_amount.toLocaleString()} payments.
                 </span>
               </div>
 
@@ -327,7 +327,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
                 <span>Single-Tier Safety Rules</span>
               </h4>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Emmacom Digital enforces strict first-level commission rules. You will **never** receive bonuses on third-party downlines referred by your referrals. This keeps the program fully solvent, legal, and easy to understand.
+                Emmacomdigital Courses enforces strict first-level commission rules. You will **never** receive bonuses on third-party downlines referred by your referrals. This keeps the program fully solvent, legal, and easy to understand.
               </p>
             </div>
           </div>
@@ -337,7 +337,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
         <div className="mt-12 pt-10 border-t border-gray-200 animate-fade-in" id="frontend-products-catalog">
           <div className="text-center mb-8">
             <span className="bg-indigo-50 text-indigo-700 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-100">
-              Emmacom Assets Vault
+              Emmacomdigital Courses Assets Vault
             </span>
             <h3 className="text-2xl font-black text-slate-800 tracking-tight mt-2.5">
               📦 Preview Our Premium Products Suite
@@ -398,7 +398,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
           <div className="space-y-2">
             <h2 className="text-2xl font-black text-gray-900">Registration Complete!</h2>
             <p className="text-sm text-gray-500">
-              Welcome to the family. Your registration at Emmacom Digital was certified successfully.
+              Welcome to the family. Your registration at Emmacomdigital Courses was certified successfully.
             </p>
           </div>
 
@@ -452,7 +452,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
                 </div>
                 <div>
                   <h3 className="font-semibold text-xs text-slate-300 uppercase tracking-wider font-mono">Secured by Flutterwave</h3>
-                  <p className="text-sm font-bold text-white uppercase tracking-tight">EMMACOM DIGITAL INTEGRATOR</p>
+                  <p className="text-sm font-bold text-white uppercase tracking-tight">EMMACOMDIGITAL COURSES INTEGRATOR</p>
                 </div>
               </div>
               <button

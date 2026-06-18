@@ -108,7 +108,7 @@ export default function AffiliateDashboard({ storeState, activeUserId, onRefresh
         // Generous static fallback for zero-dependency static deploys (e.g. Netlify)
         const localAdvice = `👋 Hello ${activeUser.full_name}!
 
-Here is your **Emmacom Smart Advisor** action plan:
+Here is your **Emmacomdigital Courses Advisor** action plan:
 - **Performance Rating**: ${stats.totalPersonalReferrals > 5 ? "⭐️ High Earning Champion Status" : "📈 Growth Potential Status"}.
 - **Milestone Reached**: You have unlocked ₦${stats.totalEarnings.toLocaleString()} in cumulative revenue.
 - **Conversion Booster**: Your direct network count is ${stats.totalPersonalReferrals} partners. To cross the next tier, share your customized link with 3 more associates!
@@ -342,7 +342,7 @@ Here is your **Emmacom Smart Advisor** action plan:
       <div className="bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-950 font-sans p-6 rounded-2xl text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="space-y-1">
           <span className="text-[10px] text-amber-400 font-bold uppercase tracking-widest block">Unique Recruitment Address</span>
-          <h3 className="font-bold text-base md:text-lg">Promote Emmacom Digital to Earn Commissions</h3>
+          <h3 className="font-bold text-base md:text-lg">Promote Emmacomdigital Courses to Earn Commissions</h3>
           <p className="text-indigo-200 text-xs max-w-xl">
             Copy and share this direct link. Any user who clicks it, registers, and completes payment automatically registers underneath you.
           </p>
@@ -835,7 +835,7 @@ Here is your **Emmacom Smart Advisor** action plan:
                       </div>
                       <div className="col-span-2 border-t border-slate-100 pt-2">
                         <span className="text-slate-400 block text-[9px] uppercase tracking-wider">Account Name</span>
-                        <span className="font-bold text-slate-800 font-sans">{storeState.config.flutterwave_account_name || "Emmacom Digital Hub / Flutterwave"}</span>
+                        <span className="font-bold text-slate-800 font-sans">{storeState.config.flutterwave_account_name || "Emmacomdigital Courses Hub / Flutterwave"}</span>
                       </div>
                     </div>
                   </div>
@@ -1009,7 +1009,7 @@ function DigitalProductsSection({ downloadingId, successId, onDownload, affiliat
             <BookOpen className="h-5 w-5 text-indigo-600 font-bold" />
             <span>Digital Products & Assets Library</span>
           </h3>
-          <p className="text-xs text-slate-500 mt-1">Emmacom Digital official resources suite. All downloads are audited securely in-app.</p>
+          <p className="text-xs text-slate-500 mt-1">Emmacomdigital Courses official resources suite. All downloads are audited securely in-app.</p>
         </div>
         <span className="text-xs bg-indigo-50 text-indigo-600 font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
           Partner Access Active

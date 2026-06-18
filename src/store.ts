@@ -304,7 +304,7 @@ const DEFAULT_CONFIG: AdminConfig = {
   minimum_withdrawal: 2000, // ₦2000
   flutterwave_bank_name: "Wema Bank (FW)",
   flutterwave_account_number: "0048127392",
-  flutterwave_account_name: "Emmacom Digital Hub / Flutterwave"
+  flutterwave_account_name: "Emmacomdigital Courses Hub / Flutterwave"
 };
 
 const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
@@ -373,7 +373,7 @@ const SEED_NOTIFICATIONS: AppNotification[] = [
     notification_id: "NTF_003",
     user_id: "USR_DAVID",
     title: "Monthly Donation Due",
-    message: "Your monthly donation to Emmacom Digital is overdue. Access is currently restricted and sponsor eligibility is paused.",
+    message: "Your monthly donation to Emmacomdigital Courses is overdue. Access is currently restricted and sponsor eligibility is paused.",
     created_at: "2026-05-15T09:00:00Z",
     read: true
   },
@@ -541,7 +541,7 @@ export class AffiliateSystemStore {
   }): { success: boolean; error?: string; user?: UserProfile; affiliate?: Affiliate } {
     // Check if email already registered
     if (this.users.some(u => u.email.toLowerCase() === params.email.toLowerCase())) {
-      return { success: false, error: "This email address is already registered on Emmacom Digital." };
+      return { success: false, error: "This email address is already registered on Emmacomdigital Courses." };
     }
 
     const userId = `USR_${Date.now()}`;
@@ -643,7 +643,7 @@ export class AffiliateSystemStore {
           this.addNotification(
             sponsorUser.user_id,
             "New Referral Commission!",
-            `Your referral ${params.fullName} has joined Emmacom Digital. You have earned a one-time commission of ₦${commissionAmount.toLocaleString()}!`
+            `Your referral ${params.fullName} has joined Emmacomdigital Courses. You have earned a one-time commission of ₦${commissionAmount.toLocaleString()}!`
           );
         } else {
           this.addNotification(
@@ -676,7 +676,7 @@ export class AffiliateSystemStore {
     sponsorCode: string | null;
   }): { success: boolean; error?: string; user?: UserProfile } {
     if (this.users.some(u => u.email.toLowerCase() === params.email.toLowerCase())) {
-      return { success: false, error: "This email address is already registered on Emmacom Digital." };
+      return { success: false, error: "This email address is already registered on Emmacomdigital Courses." };
     }
 
     const userId = `USR_${Date.now()}`;
