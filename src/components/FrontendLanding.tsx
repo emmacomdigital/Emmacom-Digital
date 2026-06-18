@@ -19,15 +19,23 @@ import {
   Menu,
   X
 } from "lucide-react";
+import { appStore, AffiliateSystemStore } from "../store";
 
 interface FrontendLandingProps {
   onLoginClick: () => void;
   onRegisterClick: () => void;
   isLoggedIn?: boolean;
   onGoToDashboard?: () => void;
+  storeState?: AffiliateSystemStore;
 }
 
-export default function FrontendLanding({ onLoginClick, onRegisterClick, isLoggedIn, onGoToDashboard }: FrontendLandingProps) {
+export default function FrontendLanding({ 
+  onLoginClick, 
+  onRegisterClick, 
+  isLoggedIn, 
+  onGoToDashboard,
+  storeState = appStore 
+}: FrontendLandingProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
@@ -448,6 +456,79 @@ export default function FrontendLanding({ onLoginClick, onRegisterClick, isLogge
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Premium Product Suite & Flyers Section */}
+      <section className="bg-slate-50 py-16 sm:py-24 border-b border-gray-155" id="premium-showcase">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4" id="premium-header-block">
+            <span className="text-xs text-indigo-600 font-extrabold tracking-widest uppercase block">EXCLUSIVE ACADEMY ASSETS</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-sans">
+              Our Premium Catalog & Flyer Showcase
+            </h2>
+            <p className="text-base text-slate-600 font-sans">
+              Instantly unlock these high-converting, licensed marketing flyers and masterclass handbooks formatted in high-resolution Instagram sizes (1:1 square). Distribute these assets to supercharge your referral campaigns as an official partner.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="premium-suite-grid">
+            {(storeState.premiumProducts && storeState.premiumProducts.length > 0
+              ? storeState.premiumProducts
+              : []
+            ).map(product => (
+              <div 
+                key={product.id}
+                className="bg-white rounded-3xl overflow-hidden border border-gray-150 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col hover:border-indigo-300 group"
+              >
+                {/* 1:1 Dynamic Instagram Size Flyer Container */}
+                <div className="aspect-square w-full relative overflow-hidden bg-slate-100 border-b border-slate-100">
+                  <img 
+                    src={product.image} 
+                    alt={product.name} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="text-[10px] bg-slate-900/90 backdrop-blur-xs text-white font-black px-2.5 py-1 rounded-md uppercase tracking-wider shadow-sm">
+                      {product.badge}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                  <div className="space-y-2">
+                    <h4 className="font-extrabold text-slate-900 text-sm leading-snug line-clamp-2 group-hover:text-indigo-600 transition-colors">{product.name}</h4>
+                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-3 font-sans">{product.desc}</p>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider flex items-center space-x-1">
+                      <Sparkles className="h-3.5 w-3.5 text-indigo-500 animate-pulse" />
+                      <span>Ready to Broadcast</span>
+                    </span>
+                    <button
+                      onClick={onRegisterClick}
+                      className="text-xs text-indigo-600 hover:text-indigo-800 font-extrabold flex items-center space-x-1 cursor-pointer transition-colors uppercase tracking-wider"
+                    >
+                      <span>Get Flyer</span>
+                      <ArrowRight className="h-3 w-3 transform group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12 animate-bounce">
+            <button
+              onClick={onRegisterClick}
+              className="inline-flex items-center space-x-2 py-3.5 px-8 text-xs text-white bg-indigo-600 hover:bg-slate-900 font-extrabold rounded-2xl shadow-xl transition-all uppercase tracking-wider cursor-pointer transform hover:scale-105"
+            >
+              <span>Unlock Entire Premium Catalog Suite</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </section>

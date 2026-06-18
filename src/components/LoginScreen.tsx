@@ -200,16 +200,16 @@ export default function LoginScreen({ storeState, onLoginSuccess, onNavigateToRe
             </div>
 
             <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-md shadow-indigo-100 mt-2"
-            >
-              <span>{loading ? "Verifying Credentials..." : "Sign In to Partner Workspace"}</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </form>
+               type="submit"
+               disabled={loading}
+               className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-md shadow-indigo-100 mt-2"
+             >
+               <span>{loading ? "Verifying Credentials..." : "Sign In to Partner Workspace"}</span>
+               <ArrowRight className="h-4 w-4" />
+             </button>
+           </form>
 
-          {/* Navigation to Registration */}
+           {/* Navigation to Registration */}
           <div className="border-t border-slate-100 pt-5 text-center space-y-3">
             <p className="text-xs text-slate-500 font-sans">
               Don't have an affiliate partner account?

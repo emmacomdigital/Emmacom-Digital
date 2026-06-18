@@ -9,7 +9,8 @@ import {
   AppNotification,
   AuditLog,
   AffiliateStatus,
-  DonationStatus
+  DonationStatus,
+  PremiumProduct
 } from "./types";
 
 // Base Seed Data If Storage Is Empty
@@ -306,6 +307,51 @@ const DEFAULT_CONFIG: AdminConfig = {
   flutterwave_account_name: "Emmacom Digital Hub / Flutterwave"
 };
 
+const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
+  {
+    id: "p-1",
+    name: "Conversion Secrets: Digital Affiliate Handbook",
+    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600",
+    desc: "Proven tactics and copy-paste templates to target social media platforms to refer new users.",
+    badge: "E-BOOK HANDBOOK"
+  },
+  {
+    id: "p-2",
+    name: "WhatsApp Auto-Responder Templates & Funnel Swipe File",
+    image: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=600",
+    desc: "Boost communication response rates using our exact sequence swipe codes.",
+    badge: "MOCK TRANSCRIPT"
+  },
+  {
+    id: "p-3",
+    name: "Naira Arbitrage Master Spreadsheets & Audit Pack",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600",
+    desc: "Accurately record metrics, track margins, and evaluate business efficiency.",
+    badge: "EXCEL WORKBOOK"
+  },
+  {
+    id: "p-4",
+    name: "Advanced Google Search Ads Campaign Guide",
+    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=600",
+    desc: "Scale highly targeted conversion pipelines to generate automated referral codes signups.",
+    badge: "VIDEO SECRETS"
+  },
+  {
+    id: "p-5",
+    name: "Emmacom Automated Multi-Channel Campaign Broadcaster",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=600",
+    desc: "Broadcast personalized messages to multiple networks safely without account suspension.",
+    badge: "UTILITY PIPELINE"
+  },
+  {
+    id: "p-6",
+    name: "Single-Tier Funnel Builder React Starter Kit",
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600",
+    desc: "Spin up high-converting landing sheets that perfectly sync sponsorship IDs on redirect.",
+    badge: "REACT FRAMEWORK"
+  }
+];
+
 const SEED_NOTIFICATIONS: AppNotification[] = [
   {
     notification_id: "NTF_001",
@@ -378,6 +424,7 @@ export class AffiliateSystemStore {
   public notifications: AppNotification[];
   public auditLogs: AuditLog[];
   public systemDate: string; // ISO string to simulate passage of time
+  public premiumProducts: PremiumProduct[];
 
   constructor() {
     this.users = loadFromStorage<UserProfile[]>("emmacom_users", SEED_USERS);
@@ -390,6 +437,7 @@ export class AffiliateSystemStore {
     this.notifications = loadFromStorage<AppNotification[]>("emmacom_notifications", SEED_NOTIFICATIONS);
     this.auditLogs = loadFromStorage<AuditLog[]>("emmacom_logs", SEED_AUDIT_LOGS);
     this.systemDate = loadFromStorage<string>("emmacom_system_date", "2026-06-13T10:00:00Z");
+    this.premiumProducts = loadFromStorage<PremiumProduct[]>("emmacom_premium_products", SEED_PREMIUM_PRODUCTS);
 
     // Persist if not already there
     this.saveAll();
@@ -406,6 +454,7 @@ export class AffiliateSystemStore {
     saveToStorage("emmacom_notifications", this.notifications);
     saveToStorage("emmacom_logs", this.auditLogs);
     saveToStorage("emmacom_system_date", this.systemDate);
+    saveToStorage("emmacom_premium_products", this.premiumProducts);
   }
 
   // Calculate commission amounts according to parameters
@@ -1182,6 +1231,26 @@ export class AffiliateSystemStore {
       this.addAuditLog("USR_ADMIN", "Admin profile updated", `Admin credentials updated email to ${email} and set a unique password.`);
       this.saveAll();
     }
+  }
+
+  // Edit / update a premium suite product catalog item
+  public updatePremiumProduct(id: string, name: string, desc: string, badge: string, image: string): void {
+    const product = this.premiumProducts.find(p => p.id === id);
+    if (product) {
+      product.name = name.trim();
+      product.desc = desc.trim();
+      product.badge = badge.trim();
+      product.image = image.trim();
+      this.addAuditLog("USR_ADMIN", "Premium product updated", `Updated product layout for "${product.name}"`);
+      this.saveAll();
+    }
+  }
+
+  // Restore defaults
+  public restoreDefaultPremiumProducts(): void {
+    this.premiumProducts = JSON.parse(JSON.stringify(SEED_PREMIUM_PRODUCTS));
+    this.addAuditLog("USR_ADMIN", "Premium products restored", "Restored premium products to Unsplash defaults.");
+    this.saveAll();
   }
 
   // Read utilities

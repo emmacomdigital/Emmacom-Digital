@@ -348,55 +348,15 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                id: "p-1",
-                name: "Conversion Secrets: Digital Affiliate Handbook",
-                image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600",
-                desc: "Proven tactics and copy-paste templates to target social media platforms to refer new users.",
-                badge: "E-BOOK HANDBOOK"
-              },
-              {
-                id: "p-2",
-                name: "WhatsApp Auto-Responder Templates & Funnel Swipe File",
-                image: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=600",
-                desc: "Boost communication response rates using our exact sequence swipe codes.",
-                badge: "MOCK TRANSCRIPT"
-              },
-              {
-                id: "p-3",
-                name: "Naira Arbitrage Master Spreadsheets & Audit Pack",
-                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600",
-                desc: "Accurately record metrics, track margins, and evaluate business efficiency.",
-                badge: "EXCEL WORKBOOK"
-              },
-              {
-                id: "p-4",
-                name: "Advanced Google Search Ads Campaign Guide",
-                image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=600",
-                desc: "Scale highly targeted conversion pipelines to generate automated referral codes signups.",
-                badge: "VIDEO SECRETS"
-              },
-              {
-                id: "p-5",
-                name: "Emmacom Automated Multi-Channel Campaign Broadcaster",
-                image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=600",
-                desc: "Broadcast personalized messages to multiple networks safely without account suspension.",
-                badge: "UTILITY PIPELINE"
-              },
-              {
-                id: "p-6",
-                name: "Single-Tier Funnel Builder React Starter Kit",
-                image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600",
-                desc: "Spin up high-converting landing sheets that perfectly sync sponsorship IDs on redirect.",
-                badge: "REACT FRAMEWORK"
-              }
-            ].map(product => (
+            {(storeState.premiumProducts && storeState.premiumProducts.length > 0
+              ? storeState.premiumProducts
+              : []
+            ).map(product => (
               <div 
                 key={product.id}
                 className="bg-white rounded-2xl overflow-hidden border border-gray-150 shadow-xs hover:shadow-md transition-all flex flex-col hover:border-indigo-200"
               >
-                <div className="h-40 w-full relative overflow-hidden bg-slate-100">
+                <div className="aspect-square w-full relative overflow-hidden bg-slate-100">
                   <img 
                     src={product.image} 
                     alt={product.name} 

@@ -48,6 +48,54 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
   const [profileSuccess, setProfileSuccess] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
 
+  // Premium Products Editor State
+  const initialProductId = storeState.premiumProducts && storeState.premiumProducts[0] ? storeState.premiumProducts[0].id : "p-1";
+  const [selectedProductId, setSelectedProductId] = useState(initialProductId);
+
+  // Dynamic initializer for edit fields
+  const activeProd = storeState.premiumProducts?.find(p => p.id === selectedProductId) || storeState.premiumProducts?.[0];
+  const [prodName, setProdName] = useState(activeProd?.name || "");
+  const [prodBadge, setProdBadge] = useState(activeProd?.badge || "");
+  const [prodDesc, setProdDesc] = useState(activeProd?.desc || "");
+  const [prodImage, setProdImage] = useState(activeProd?.image || "");
+  const [productSuccess, setProductSuccess] = useState(false);
+
+  // Ensure that state resets if another product is selected
+  const handleProductSelect = (id: string) => {
+    setSelectedProductId(id);
+    const prod = storeState.premiumProducts?.find(p => p.id === id);
+    if (prod) {
+      setProdName(prod.name);
+      setProdBadge(prod.badge);
+      setProdDesc(prod.desc);
+      setProdImage(prod.image);
+    }
+  };
+
+  const handleSaveProduct = (e: FormEvent) => {
+    e.preventDefault();
+    if (!prodName.trim()) return;
+    storeState.updatePremiumProduct(selectedProductId, prodName, prodDesc, prodBadge, prodImage);
+    setProductSuccess(true);
+    onRefresh();
+    setTimeout(() => setProductSuccess(false), 4000);
+  };
+
+  const handleRestoreDefaults = () => {
+    storeState.restoreDefaultPremiumProducts();
+    onRefresh();
+    const firstProd = storeState.premiumProducts?.[0];
+    if (firstProd) {
+      setSelectedProductId(firstProd.id);
+      setProdName(firstProd.name);
+      setProdBadge(firstProd.badge);
+      setProdDesc(firstProd.desc);
+      setProdImage(firstProd.image);
+    }
+    setProductSuccess(true);
+    setTimeout(() => setProductSuccess(false), 4000);
+  };
+
   // Modal / Input values for payout resolution
   const [resolvingWthId, setResolvingWthId] = useState<string | null>(null);
   const [resolutionAction, setResolutionAction] = useState<"approve" | "reject">("approve");
@@ -397,6 +445,142 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                 Save Login Credentials
               </button>
             </form>
+          </div>
+
+          {/* Card: Premium Products Suite Editor */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <h3 className="text-lg font-bold text-slate-900 mb-2 flex items-center space-x-2">
+              <Sliders className="h-4.5 w-4.5 text-indigo-600 shrink-0" />
+              <span>Premium Suite Catalog & Flyers</span>
+            </h3>
+            <p className="text-xs text-slate-400 mb-4 leading-normal">
+              Customize the titles, badges, descriptions, and flyer graphics displayed on the registration page preview catalog. Supports Instagram-size (1:1 square) graphics.
+            </p>
+
+            {productSuccess && (
+              <div className="mb-4 p-3 bg-emerald-50 border-l-4 border-emerald-500 rounded text-emerald-800 text-xs font-semibold leading-relaxed">
+                ✓ Product catalog and flyers updated successfully!
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Select Product to Modify</label>
+                <select
+                  value={selectedProductId}
+                  onChange={(e) => handleProductSelect(e.target.value)}
+                  className="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+                >
+                  {(storeState.premiumProducts && storeState.premiumProducts.length > 0 
+                    ? storeState.premiumProducts 
+                    : []
+                  ).map(prod => (
+                    <option key={prod.id} value={prod.id}>
+                      {prod.id.toUpperCase()}: {prod.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <form onSubmit={handleSaveProduct} className="space-y-4 pt-2 border-t border-slate-150">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Product Name / Title</label>
+                  <input
+                    type="text"
+                    required
+                    value={prodName}
+                    onChange={(e) => setProdName(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    placeholder="Enter course or guide name"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tag / Badge</label>
+                    <input
+                      type="text"
+                      required
+                      value={prodBadge}
+                      onChange={(e) => setProdBadge(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500 uppercase"
+                      placeholder="e.g. E-BOOK, FLYER"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Flyer / Image URL</label>
+                    <input
+                      type="url"
+                      required
+                      value={prodImage}
+                      onChange={(e) => setProdImage(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      placeholder="https://..."
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Short Description</label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={prodDesc}
+                    onChange={(e) => setProdDesc(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+                    placeholder="Enter descriptive copy..."
+                  />
+                </div>
+
+                {/* Live Square Flyer Preview */}
+                <div className="border border-slate-100 rounded-xl p-3 bg-slate-50 space-y-2">
+                  <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Square Flyer Preview (Instagram Size)</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                    <div className="sm:col-span-4 aspect-square max-w-[120px] mx-auto rounded-lg overflow-hidden border border-slate-200 bg-white shadow-inner">
+                      {prodImage ? (
+                        <img
+                          src={prodImage}
+                          alt="Flyer design"
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=200";
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-300 text-[10px] font-sans">No Image</div>
+                      )}
+                    </div>
+                    <div className="sm:col-span-8 space-y-1">
+                      <span className="inline-block text-[8px] bg-indigo-650 text-white font-extrabold px-1.5 py-0.5 rounded tracking-wider uppercase text-center min-w-[50px]">{prodBadge || "FLYER"}</span>
+                      <h4 className="font-extrabold text-slate-800 text-xs line-clamp-1 leading-snug">{prodName || "Untitled Catalog Asset"}</h4>
+                      <p className="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">{prodDesc || "No description set yet."}</p>
+                    </div>
+                  </div>
+                  <span className="text-[9px] text-slate-450 block leading-tight pt-1">
+                    💡 <strong>Tip for Custom Flyers:</strong> Upload your flyers on any free host (like imgbb.com, postimages.org, or Discord attachment) and paste the <strong>Direct Image URL</strong> (ending in .png, .jpg or .webp) above!
+                  </span>
+                </div>
+
+                <div className="flex gap-2.5">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-indigo-600 hover:bg-slate-900 text-white text-xs font-bold py-3 px-4 rounded-xl shadow-md transition-colors uppercase tracking-wider cursor-pointer font-sans"
+                  >
+                    Save Asset Details
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleRestoreDefaults}
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-extrabold py-3 px-4 rounded-xl border border-slate-200 transition-colors cursor-pointer"
+                    title="Restore all items to defaults"
+                  >
+                    Reset All
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
 
           {/* Table: Payout approvals */}

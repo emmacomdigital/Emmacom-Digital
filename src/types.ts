@@ -96,3 +96,12 @@ export interface AuditLog {
   details: string;
   created_at: string;
 }
+
+export interface PremiumProduct {
+  id: string;
+  name: string;
+  image: string;
+  desc: string;
+  badge: string;
+}
+

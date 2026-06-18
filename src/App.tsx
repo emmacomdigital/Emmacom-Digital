@@ -207,6 +207,7 @@ export default function App() {
           />
         ) : (
           <FrontendLanding
+            storeState={storeState}
             onLoginClick={() => {
               setShowLogin(true);
               setShowRegister(false);
@@ -431,6 +432,7 @@ export default function App() {
       <main className="flex-1 pb-24">
         {activeRole === "home" && (
           <FrontendLanding
+            storeState={storeState}
             onLoginClick={() => {
               handleRoleChange("affiliate");
             }}
