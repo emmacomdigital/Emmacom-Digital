@@ -220,7 +220,7 @@ export default function App() {
         )}
         <footer className="bg-slate-950 text-slate-400 border-t border-slate-900 py-6 px-4 md:px-8 text-xs font-mono mt-auto relative">
           <div className="max-w-7xl mx-auto text-center text-[10px] text-slate-500 font-sans">
-            © {new Date().getFullYear()} Emmacomdigital Courses. Fully optimized for robust production cloud hosting and secure databases.
+            © {new Date().getFullYear()} Emmacom Digital Academy. Fully optimized for robust production cloud hosting and secure databases.
           </div>
         </footer>
         <WhatsAppSupport />
@@ -238,7 +238,7 @@ export default function App() {
             E
           </div>
           <div>
-            <span className="text-[10px] text-indigo-600 uppercase font-black tracking-widest block font-sans">Emmacomdigital Courses</span>
+            <span className="text-[10px] text-indigo-600 uppercase font-black tracking-widest block font-sans">Emmacom Digital Academy</span>
             <span className="text-sm font-extrabold text-slate-800 tracking-tight block">Partner Commission Hub</span>
           </div>
         </div>
@@ -475,7 +475,7 @@ export default function App() {
 
       <footer className="bg-slate-950 text-slate-400 border-t border-slate-900 py-6 px-4 md:px-8 text-xs font-mono mt-auto relative">
         <div className="max-w-7xl mx-auto text-center text-[10px] text-slate-500 font-sans">
-          © {new Date().getFullYear()} Emmacomdigital Courses. Single-Tier partner marketing network. Optimized for secure cloud transaction processing.
+          © {new Date().getFullYear()} Emmacom Digital Academy. Single-Tier partner marketing network. Optimized for secure cloud transaction processing.
         </div>
       </footer>
 

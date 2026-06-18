@@ -7,7 +7,7 @@ export default function WhatsAppSupport() {
 
   const handleOpenChat = () => {
     // Generate a real whatsapp link to support
-    const encodedMsg = encodeURIComponent(message || "Hello Emmacomdigital Courses Support, I need some assistance with the affiliate system!");
+    const encodedMsg = encodeURIComponent(message || "Hello Emmacom Digital Academy Support, I need some assistance with the affiliate system!");
     const whatsappUrl = `https://wa.me/2348000000000?text=${encodedMsg}`;
     window.open(whatsappUrl, "_blank");
     setMessage("");
@@ -65,7 +65,7 @@ export default function WhatsAppSupport() {
 
           {/* Quick Body info */}
           <div className="p-4 bg-gray-50 text-xs text-gray-600 leading-relaxed border-b border-gray-100">
-            👋 Welcome to Emmacomdigital Courses Support. Have questions about payouts, recurring donation compliance, or commission rules? Chat with an agent now.
+            👋 Welcome to Emmacom Digital Academy Support. Have questions about payouts, recurring donation compliance, or commission rules? Chat with an agent now.
           </div>
 
           {/* Chat input */}

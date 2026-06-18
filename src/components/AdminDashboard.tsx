@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import { AffiliateSystemStore } from "../store";
 import { UserProfile, Affiliate, Commission, Withdrawal, AdminConfig } from "../types";
 import { 
@@ -20,7 +20,9 @@ import {
   Cloud,
   Database,
   Copy,
-  ExternalLink
+  ExternalLink,
+  Upload,
+  Image as ImageIcon
 } from "lucide-react";
 
 interface AdminDashboardProps {
@@ -38,7 +40,7 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
   const [minimumWithdrawal, setMinimumWithdrawal] = useState(storeState.config.minimum_withdrawal);
   const [flutterwaveBankName, setFlutterwaveBankName] = useState(storeState.config.flutterwave_bank_name || "Wema Bank (FW)");
   const [flutterwaveAccountNumber, setFlutterwaveAccountNumber] = useState(storeState.config.flutterwave_account_number || "0048127392");
-  const [flutterwaveAccountName, setFlutterwaveAccountName] = useState(storeState.config.flutterwave_account_name || "Emmacomdigital Courses Hub / Flutterwave");
+  const [flutterwaveAccountName, setFlutterwaveAccountName] = useState(storeState.config.flutterwave_account_name || "Emmacom Digital Academy Hub / Flutterwave");
   const [configSuccess, setConfigSuccess] = useState(false);
 
   // Admin Profile Settings State
@@ -59,7 +61,11 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
   const [prodBadge, setProdBadge] = useState(activeProd?.badge || "");
   const [prodDesc, setProdDesc] = useState(activeProd?.desc || "");
   const [prodImage, setProdImage] = useState(activeProd?.image || "");
+  const [prodPdfUrl, setProdPdfUrl] = useState(activeProd?.pdfUrl || "");
+  const [prodVideoUrl, setProdVideoUrl] = useState(activeProd?.videoUrl || "");
   const [productSuccess, setProductSuccess] = useState(false);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   // Ensure that state resets if another product is selected
   const handleProductSelect = (id: string) => {
@@ -71,6 +77,51 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
       setProdBadge(prod.badge);
       setProdDesc(prod.desc);
       setProdImage(prod.image);
+      setProdPdfUrl(prod.pdfUrl || "");
+      setProdVideoUrl(prod.videoUrl || "");
+    }
+  };
+
+  const processImageFile = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload a valid image file.");
+      return;
+    }
+    setIsUploadingImage(true);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        setProdImage(e.target.result as string);
+      }
+      setIsUploadingImage(false);
+    };
+    reader.onerror = () => {
+      alert("Error reading file.");
+      setIsUploadingImage(false);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingImage(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDraggingImage(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingImage(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      processImageFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      processImageFile(e.target.files[0]);
     }
   };
 
@@ -80,17 +131,19 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
     setProdBadge("DIGITAL GUIDE");
     setProdDesc("");
     setProdImage("https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600");
+    setProdPdfUrl("");
+    setProdVideoUrl("");
   };
 
   const handleSaveProduct = (e: FormEvent) => {
     e.preventDefault();
     if (!prodName.trim()) return;
     if (isAddingNew) {
-      const newId = storeState.addPremiumProduct(prodName, prodDesc, prodBadge, prodImage);
+      const newId = storeState.addPremiumProduct(prodName, prodDesc, prodBadge, prodImage, prodPdfUrl, prodVideoUrl);
       setSelectedProductId(newId);
       setIsAddingNew(false);
     } else {
-      storeState.updatePremiumProduct(selectedProductId, prodName, prodDesc, prodBadge, prodImage);
+      storeState.updatePremiumProduct(selectedProductId, prodName, prodDesc, prodBadge, prodImage, prodPdfUrl, prodVideoUrl);
     }
     setProductSuccess(true);
     onRefresh();
@@ -118,6 +171,8 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
         setProdBadge("");
         setProdDesc("");
         setProdImage("");
+        setProdPdfUrl("");
+        setProdVideoUrl("");
       }
       setProductSuccess(true);
       setTimeout(() => setProductSuccess(false), 4000);
@@ -135,6 +190,8 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
       setProdBadge(firstProd.badge);
       setProdDesc(firstProd.desc);
       setProdImage(firstProd.image);
+      setProdPdfUrl(firstProd.pdfUrl || "");
+      setProdVideoUrl(firstProd.videoUrl || "");
     }
     setProductSuccess(true);
     setTimeout(() => setProductSuccess(false), 4000);
@@ -574,16 +631,69 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Flyer / Image URL</label>
-                    <input
-                      type="url"
-                      required
-                      value={prodImage}
-                      onChange={(e) => setProdImage(e.target.value)}
-                      className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                      placeholder="https://..."
-                    />
+                  <div className="flex flex-col">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center justify-between">
+                      <span>Flyer / Image (Netlify Hosting Direct Upload)</span>
+                      <span className="text-[10px] text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded font-mono font-bold">Netlify Native</span>
+                    </label>
+                    
+                    {/* Drag and Drop Zone Container */}
+                    <div 
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={`relative border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center transition-all cursor-pointer ${
+                        isDraggingImage 
+                          ? "border-indigo-600 bg-indigo-50/50" 
+                          : "border-slate-200 hover:border-slate-350 bg-slate-50/50"
+                      }`}
+                      onClick={() => document.getElementById("prod-image-file-input")?.click()}
+                    >
+                      <input 
+                        id="prod-image-file-input"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
+                      
+                      {isUploadingImage ? (
+                        <div className="flex flex-col items-center space-y-1 py-1.5">
+                          <div className="h-6 w-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                          <p className="text-[10.5px] font-bold text-indigo-600 font-sans">Uploading to Netlify CDN...</p>
+                        </div>
+                      ) : prodImage && prodImage.startsWith("data:") ? (
+                        <div className="space-y-1.5 flex flex-col items-center animate-fade-in">
+                          <div className="h-7 w-7 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+                            <Check className="h-4 w-4" />
+                          </div>
+                          <p className="text-[11px] font-bold text-slate-700 font-sans">Direct Image File Loaded</p>
+                          <p className="text-[9.5px] text-slate-450 font-mono">Saved directly on Netlify host storage</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-1 flex flex-col items-center">
+                          <Upload className="h-5 w-5 text-slate-400" />
+                          <p className="text-[11px] font-bold text-slate-700">Drag & Drop Image or Click</p>
+                          <p className="text-[9.5px] text-slate-400 font-mono">PNG, JPG, WEBP formats up to 4MB</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Or URL input option */}
+                    <div className="mt-2.5">
+                      <div className="flex items-center space-x-2 mb-1.5">
+                        <div className="h-[1px] bg-slate-100 flex-grow"></div>
+                        <span className="text-[9px] text-slate-400 uppercase font-bold tracking-wider font-mono">OR TYPE FILE PATH/CDN URL</span>
+                        <div className="h-[1px] bg-slate-100 flex-grow"></div>
+                      </div>
+                      <input
+                        type="url"
+                        value={prodImage.startsWith("data:") ? "" : prodImage}
+                        onChange={(e) => setProdImage(e.target.value)}
+                        className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Or enter image URL: https://images.unsplash.com/..."
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -597,6 +707,32 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                     className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
                     placeholder="Enter descriptive copy..."
                   />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Google Drive PDF Link</label>
+                    <input
+                      type="url"
+                      required
+                      value={prodPdfUrl}
+                      onChange={(e) => setProdPdfUrl(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      placeholder="https://drive.google.com/..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">YouTube Embed URL</label>
+                    <input
+                      type="url"
+                      required
+                      value={prodVideoUrl}
+                      onChange={(e) => setProdVideoUrl(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      placeholder="https://www.youtube.com/embed/..."
+                    />
+                  </div>
                 </div>
 
                 {/* Live Square Flyer Preview */}
@@ -634,7 +770,7 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                     type="submit"
                     className="flex-1 bg-indigo-600 hover:bg-slate-900 text-white text-xs font-bold py-3.5 px-4 rounded-xl shadow-md transition-colors uppercase tracking-wider cursor-pointer font-sans min-w-[120px]"
                   >
-                    {isAddingNew ? "Create Digital Product" : "Save Asset Details"}
+                    {isAddingNew ? "Create Premium Product" : "Save Catalog Details"}
                   </button>
 
                   {!isAddingNew && storeState.premiumProducts && storeState.premiumProducts.length > 0 && (

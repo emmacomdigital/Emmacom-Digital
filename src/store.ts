@@ -304,7 +304,7 @@ const DEFAULT_CONFIG: AdminConfig = {
   minimum_withdrawal: 2000, // ₦2000
   flutterwave_bank_name: "Wema Bank (FW)",
   flutterwave_account_number: "0048127392",
-  flutterwave_account_name: "Emmacomdigital Courses Hub / Flutterwave"
+  flutterwave_account_name: "Emmacom Digital Academy Hub / Flutterwave"
 };
 
 const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
@@ -313,42 +313,54 @@ const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
     name: "Conversion Secrets: Digital Affiliate Handbook",
     image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600",
     desc: "Proven tactics and copy-paste templates to target social media platforms to refer new users.",
-    badge: "E-BOOK HANDBOOK"
+    badge: "E-BOOK HANDBOOK",
+    pdfUrl: "https://drive.google.com/file/d/1BfS10Xp70X8O3fVq7D_7Z_S07Z4H9n_K/view?usp=sharing",
+    videoUrl: "https://www.youtube.com/embed/g6BtbFwA880"
   },
   {
     id: "p-2",
     name: "WhatsApp Auto-Responder Templates & Funnel Swipe File",
     image: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=600",
     desc: "Boost communication response rates using our exact sequence swipe codes.",
-    badge: "MOCK TRANSCRIPT"
+    badge: "MOCK TRANSCRIPT",
+    pdfUrl: "https://drive.google.com/file/d/1D9r8N6p-m8oW2MhQ0p3_N9Z9mG6t7H9n/view?usp=sharing",
+    videoUrl: "https://www.youtube.com/embed/13dXWhffS98"
   },
   {
     id: "p-3",
     name: "Naira Arbitrage Master Spreadsheets & Audit Pack",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600",
     desc: "Accurately record metrics, track margins, and evaluate business efficiency.",
-    badge: "EXCEL WORKBOOK"
+    badge: "EXCEL WORKBOOK",
+    pdfUrl: "https://drive.google.com/file/d/1H1p2S4r_nKoX4M9T9v7-X_Z7QG6H9n_K/view?usp=sharing",
+    videoUrl: "https://www.youtube.com/embed/d_6kY5G_6pI"
   },
   {
     id: "p-4",
     name: "Advanced Google Search Ads Campaign Guide",
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=600",
     desc: "Scale highly targeted conversion pipelines to generate automated referral codes signups.",
-    badge: "VIDEO SECRETS"
+    badge: "VIDEO SECRETS",
+    pdfUrl: "https://drive.google.com/file/d/1J2q3S5r_m8oX2MhQ9p6_X_Z9mG6t7H9n/view?usp=sharing",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   },
   {
     id: "p-5",
     name: "Emmacom Automated Multi-Channel Campaign Broadcaster",
     image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=600",
     desc: "Broadcast personalized messages to multiple networks safely without account suspension.",
-    badge: "UTILITY PIPELINE"
+    badge: "UTILITY PIPELINE",
+    pdfUrl: "https://drive.google.com/file/d/1L3r4S6p-m9oW3MhQ2p4_X_Z9mG6t7H9n/view?usp=sharing",
+    videoUrl: "https://www.youtube.com/embed/V-_O7nl0Ii0"
   },
   {
     id: "p-6",
     name: "Single-Tier Funnel Builder React Starter Kit",
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600",
     desc: "Spin up high-converting landing sheets that perfectly sync sponsorship IDs on redirect.",
-    badge: "REACT FRAMEWORK"
+    badge: "REACT FRAMEWORK",
+    pdfUrl: "https://drive.google.com/file/d/1N4r5S7p-m0oW4MhQ3p5_X_Z9mG6t7H9n/view?usp=sharing",
+    videoUrl: "https://www.youtube.com/embed/Ke90Tje7VS0"
   }
 ];
 
@@ -373,7 +385,7 @@ const SEED_NOTIFICATIONS: AppNotification[] = [
     notification_id: "NTF_003",
     user_id: "USR_DAVID",
     title: "Monthly Donation Due",
-    message: "Your monthly donation to Emmacomdigital Courses is overdue. Access is currently restricted and sponsor eligibility is paused.",
+    message: "Your monthly donation to Emmacom Digital Academy is overdue. Access is currently restricted and sponsor eligibility is paused.",
     created_at: "2026-05-15T09:00:00Z",
     read: true
   },
@@ -541,7 +553,7 @@ export class AffiliateSystemStore {
   }): { success: boolean; error?: string; user?: UserProfile; affiliate?: Affiliate } {
     // Check if email already registered
     if (this.users.some(u => u.email.toLowerCase() === params.email.toLowerCase())) {
-      return { success: false, error: "This email address is already registered on Emmacomdigital Courses." };
+      return { success: false, error: "This email address is already registered on Emmacom Digital Academy." };
     }
 
     const userId = `USR_${Date.now()}`;
@@ -643,7 +655,7 @@ export class AffiliateSystemStore {
           this.addNotification(
             sponsorUser.user_id,
             "New Referral Commission!",
-            `Your referral ${params.fullName} has joined Emmacomdigital Courses. You have earned a one-time commission of ₦${commissionAmount.toLocaleString()}!`
+            `Your referral ${params.fullName} has joined Emmacom Digital Academy. You have earned a one-time commission of ₦${commissionAmount.toLocaleString()}!`
           );
         } else {
           this.addNotification(
@@ -676,7 +688,7 @@ export class AffiliateSystemStore {
     sponsorCode: string | null;
   }): { success: boolean; error?: string; user?: UserProfile } {
     if (this.users.some(u => u.email.toLowerCase() === params.email.toLowerCase())) {
-      return { success: false, error: "This email address is already registered on Emmacomdigital Courses." };
+      return { success: false, error: "This email address is already registered on Emmacom Digital Academy." };
     }
 
     const userId = `USR_${Date.now()}`;
@@ -1234,27 +1246,31 @@ export class AffiliateSystemStore {
   }
 
   // Edit / update a premium suite product catalog item
-  public updatePremiumProduct(id: string, name: string, desc: string, badge: string, image: string): void {
+  public updatePremiumProduct(id: string, name: string, desc: string, badge: string, image: string, pdfUrl?: string, videoUrl?: string): void {
     const product = this.premiumProducts.find(p => p.id === id);
     if (product) {
       product.name = name.trim();
       product.desc = desc.trim();
       product.badge = badge.trim();
       product.image = image.trim();
+      product.pdfUrl = pdfUrl ? pdfUrl.trim() : "";
+      product.videoUrl = videoUrl ? videoUrl.trim() : "";
       this.addAuditLog("USR_ADMIN", "Premium product updated", `Updated product layout for "${product.name}"`);
       this.saveAll();
     }
   }
 
   // Add a new premium suite product catalog item
-  public addPremiumProduct(name: string, desc: string, badge: string, image: string): string {
+  public addPremiumProduct(name: string, desc: string, badge: string, image: string, pdfUrl?: string, videoUrl?: string): string {
     const newId = `p-${Date.now()}`;
     const newProduct: PremiumProduct = {
       id: newId,
       name: name.trim(),
       desc: desc.trim(),
       badge: badge.trim(),
-      image: image.trim() || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600"
+      image: image.trim() || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600",
+      pdfUrl: pdfUrl ? pdfUrl.trim() : "",
+      videoUrl: videoUrl ? videoUrl.trim() : ""
     };
     this.premiumProducts.push(newProduct);
     this.addAuditLog("USR_ADMIN", "Premium product added", `Created new catalog asset "${newProduct.name}"`);

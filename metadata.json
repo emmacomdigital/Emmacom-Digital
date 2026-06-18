@@ -1,6 +1,6 @@
 {
-  "name": "Emmacomdigital Courses",
-  "description": "An affiliate marketing, course access, and recurring commission tracking platform for Emmacomdigital Courses with automatic compliance tracking, withdrawal workflows, and custom payment simulation features.",
+  "name": "Emmacom Digital Academy",
+  "description": "An affiliate marketing, course access, and recurring commission tracking platform for Emmacom Digital Academy with automatic compliance tracking, withdrawal workflows, and custom payment simulation features.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

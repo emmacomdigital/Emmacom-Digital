@@ -72,8 +72,8 @@ export default function FrontendLanding({
 
   const faqs = [
     {
-      question: "What is Emmacomdigital Courses and how does the affiliate program work?",
-      answer: "Emmacomdigital Courses is an elite skill and digital assets hub. Members pay a one-time registration fee to unlock comprehensive premium digital products, high-ticket masterclasses, and pre-formatted marketing assets. Once registered, you obtain an authorized affiliate partner license, allowing you to recruit others using your link and earn both immediate registration commissions (20%) and recurring passive rewards."
+      question: "What is Emmacom Digital Academy and how does the affiliate program work?",
+      answer: "Emmacom Digital Academy is an elite skill and digital assets hub. Members pay a one-time registration fee to unlock comprehensive premium digital products, high-ticket masterclasses, and pre-formatted marketing assets. Once registered, you obtain an authorized affiliate partner license, allowing you to recruit others using your link and earn both immediate registration commissions (20%) and recurring passive rewards."
     },
     {
       question: "Is there a monthly commitment required to keep my affiliate status active?",
@@ -101,7 +101,7 @@ export default function FrontendLanding({
                 E
               </div>
               <div>
-                <span className="text-[10px] text-indigo-600 uppercase font-black tracking-widest block font-sans">Emmacomdigital Courses</span>
+                <span className="text-[10px] text-indigo-600 uppercase font-black tracking-widest block font-sans">Emmacom Digital Academy</span>
                 <span className="text-sm font-extrabold text-slate-900 tracking-tight block">Skill Academy & Partner Hub</span>
               </div>
             </div>
@@ -258,7 +258,7 @@ export default function FrontendLanding({
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-sans leading-relaxed">
-                Emmacomdigital Courses combines elite masterclasses in full-stack cloud dev, organic growth hacks, and funnels structure with a real-time high-performance single-tier 
+                Emmacom Digital Academy combines elite masterclasses in full-stack cloud dev, organic growth hacks, and funnels structure with a real-time high-performance single-tier 
                 affiliate distribution platform.
               </p>
 
@@ -304,7 +304,7 @@ export default function FrontendLanding({
                   <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-white/5 pb-3">
                       <div className="space-y-1">
-                        <span className="text-[10px] text-indigo-300 font-bold uppercase tracking-widest block">EMMACOMDIGITAL COURSES</span>
+                        <span className="text-[10px] text-indigo-300 font-bold uppercase tracking-widest block">EMMACOM DIGITAL ACADEMY</span>
                         <h4 className="text-sm font-bold tracking-tight">Active Partner Wallet</h4>
                       </div>
                       <span className="bg-emerald-500 text-white text-[9px] font-bold py-1 px-2.5 rounded-full block">Live Sync</span>
@@ -427,7 +427,7 @@ export default function FrontendLanding({
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4" id="benefits-header-block">
             <span className="text-xs text-indigo-600 font-extrabold tracking-widest uppercase">THE COOPERATIVE ADVANTAGE</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-sans">
-              Why Affiliates Choose Emmacomdigital Courses
+              Why Affiliates Choose Emmacom Digital Academy
             </h2>
             <p className="text-base text-slate-600 font-sans">
               Our unique reward mechanism incentivizes genuine peer acquisition growth on secure serverless databases, maximizing cashouts with full visibility.

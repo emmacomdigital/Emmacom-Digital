@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from "react";
 import { AffiliateSystemStore } from "../store";
-import { UserProfile, Affiliate, Commission, Withdrawal } from "../types";
+import { UserProfile, Affiliate, Commission, Withdrawal, PremiumProduct } from "../types";
 import { 
   Copy, 
   Check, 
@@ -25,7 +25,10 @@ import {
   BookOpen,
   Unlock,
   FileText,
-  ShieldCheck
+  ShieldCheck,
+  Video,
+  Play,
+  ExternalLink
 } from "lucide-react";
 
 interface AffiliateDashboardProps {
@@ -108,7 +111,7 @@ export default function AffiliateDashboard({ storeState, activeUserId, onRefresh
         // Generous static fallback for zero-dependency static deploys (e.g. Netlify)
         const localAdvice = `👋 Hello ${activeUser.full_name}!
 
-Here is your **Emmacomdigital Courses Advisor** action plan:
+Here is your **Emmacom Digital Academy Advisor** action plan:
 - **Performance Rating**: ${stats.totalPersonalReferrals > 5 ? "⭐️ High Earning Champion Status" : "📈 Growth Potential Status"}.
 - **Milestone Reached**: You have unlocked ₦${stats.totalEarnings.toLocaleString()} in cumulative revenue.
 - **Conversion Booster**: Your direct network count is ${stats.totalPersonalReferrals} partners. To cross the next tier, share your customized link with 3 more associates!
@@ -342,7 +345,7 @@ Here is your **Emmacomdigital Courses Advisor** action plan:
       <div className="bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-950 font-sans p-6 rounded-2xl text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="space-y-1">
           <span className="text-[10px] text-amber-400 font-bold uppercase tracking-widest block">Unique Recruitment Address</span>
-          <h3 className="font-bold text-base md:text-lg">Promote Emmacomdigital Courses to Earn Commissions</h3>
+          <h3 className="font-bold text-base md:text-lg">Promote Emmacom Digital Academy to Earn Commissions</h3>
           <p className="text-indigo-200 text-xs max-w-xl">
             Copy and share this direct link. Any user who clicks it, registers, and completes payment automatically registers underneath you.
           </p>
@@ -764,6 +767,7 @@ Here is your **Emmacomdigital Courses Advisor** action plan:
         successId={downloadSuccessId} 
         onDownload={simulateDownload} 
         affiliateStatus={activeAffiliate?.status}
+        premiumProducts={storeState.premiumProducts}
       />
 
       {/* Simulated Donation Renewal Modal */}
@@ -835,7 +839,7 @@ Here is your **Emmacomdigital Courses Advisor** action plan:
                       </div>
                       <div className="col-span-2 border-t border-slate-100 pt-2">
                         <span className="text-slate-400 block text-[9px] uppercase tracking-wider">Account Name</span>
-                        <span className="font-bold text-slate-800 font-sans">{storeState.config.flutterwave_account_name || "Emmacomdigital Courses Hub / Flutterwave"}</span>
+                        <span className="font-bold text-slate-800 font-sans">{storeState.config.flutterwave_account_name || "Emmacom Digital Academy Hub / Flutterwave"}</span>
                       </div>
                     </div>
                   </div>
@@ -953,137 +957,190 @@ interface DigitalProductsSectionProps {
   successId: string | null;
   onDownload: (id: string, name: string) => void;
   affiliateStatus?: string;
+  premiumProducts?: PremiumProduct[];
 }
 
-function DigitalProductsSection({ downloadingId, successId, onDownload, affiliateStatus }: DigitalProductsSectionProps) {
-  const productsList = [
-    {
-      id: "prod-01",
-      name: "Conversion Secrets: Digital Affiliate Handbook",
-      size: "12.4 MB",
-      format: "PDF Document",
-      desc: "Proven tactics and copy-paste templates to target social media platforms to refer new users."
-    },
-    {
-      id: "prod-02",
-      name: "WhatsApp Auto-Responder Templates & Funnel Swipe File",
-      size: "4.8 MB",
-      format: "Text Script",
-      desc: "Boost communication response rates using our exact sequence swipe codes."
-    },
-    {
-      id: "prod-03",
-      name: "Naira Arbitrage Master Spreadsheets & Audit Pack",
-      size: "7.1 MB",
-      format: "Excel Template",
-      desc: "Accurately record metrics, track margins, and evaluate business efficiency."
-    },
-    {
-      id: "prod-04",
-      name: "Advanced Google Search Ads Campaign Guide",
-      size: "1.2 GB",
-      format: "Full Video Masterclass",
-      desc: "Scale highly targeted conversion pipelines to generate automated referral codes signups."
-    },
-    {
-      id: "prod-05",
-      name: "Emmacom Automated Multi-Channel Campaign Broadcaster",
-      size: "18.5 MB",
-      format: "Crossplatform Software Utility",
-      desc: "Broadcast personalized messages to multiple networks safely without account suspension."
-    },
-    {
-      id: "prod-06",
-      name: "Single-Tier Funnel Builder React Starter Kit",
-      size: "34.1 MB",
-      format: "Source Code Archive",
-      desc: "Spin up high-converting landing sheets that perfectly sync sponsorship IDs on redirect."
+function DigitalProductsSection({ downloadingId, successId, onDownload, affiliateStatus, premiumProducts = [] }: DigitalProductsSectionProps) {
+  const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
+
+  const toggleVideoActive = (productId: string) => {
+    if (activeVideoId === productId) {
+      setActiveVideoId(null);
+    } else {
+      setActiveVideoId(productId);
     }
-  ];
+  };
+
+  const isComplianceLimited = affiliateStatus !== "active";
 
   return (
     <div className="space-y-5" id="assets-hub-suite">
-      <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
+      <div className="border-b border-gray-100 pb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
         <div>
           <h3 className="text-xl font-black text-slate-900 tracking-tight flex items-center space-x-2">
             <BookOpen className="h-5 w-5 text-indigo-600 font-bold" />
-            <span>Digital Products & Assets Library</span>
+            <span>Premium Catalog</span>
           </h3>
-          <p className="text-xs text-slate-500 mt-1">Emmacomdigital Courses official resources suite. All downloads are audited securely in-app.</p>
+          <p className="text-xs text-slate-500 mt-1">Emmacom Digital Academy premium resources suite. All downloads and courses are audited securely in-app.</p>
         </div>
-        <span className="text-xs bg-indigo-50 text-indigo-600 font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
-          Partner Access Active
-        </span>
+        <div>
+          {isComplianceLimited ? (
+            <span className="text-xs bg-rose-50 border border-rose-100 text-rose-600 font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono flex items-center space-x-1">
+              <Lock className="h-3 w-3" />
+              <span>Catalog Locked</span>
+            </span>
+          ) : (
+            <span className="text-xs bg-indigo-50 text-indigo-600 font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
+              Partner Access Active
+            </span>
+          )}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {productsList.map((product) => {
-          const isComplianceLimited = affiliateStatus !== "active";
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
+        {premiumProducts.map((product) => {
+          const isVideoActive = activeVideoId === product.id;
           const isCardDownloading = downloadingId === product.id;
           const isCardSuccess = successId === product.id;
 
-          const handleActionClick = () => {
+          const handleDownloadSimulate = () => {
             if (isComplianceLimited) {
-              alert(`Your Affiliate License status is locked due to outstanding monthly donations.\n\nPlease submit your regular donation to restore products access.`);
+              alert(`Your Affiliate License status is locked due to outstanding monthly donations.\n\nPlease submit your regular donation to restore Premium Catalog access.`);
               return;
             }
-
             onDownload(product.id, product.name);
           };
 
           return (
             <div 
               key={product.id} 
-              className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-indigo-100 transition-all flex flex-col justify-between hover:shadow-md"
+              className="bg-white rounded-2xl border border-gray-150 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between hover:border-indigo-150"
             >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded tracking-wide uppercase font-mono flex items-center space-x-1">
-                    <Sparkles className="h-3 w-3 text-amber-500" />
-                    <span>PREMIUM ASSET</span>
-                  </span>
+              {/* Image Banner */}
+              <div className="aspect-video w-full relative overflow-hidden bg-slate-100 border-b border-gray-100">
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* Badge overlay */}
+                <span className="absolute top-3 left-3 text-[9px] bg-slate-900/95 text-white font-extrabold px-2.5 py-1 rounded-full shadow-sm uppercase tracking-wider font-sans flex items-center space-x-1">
+                  <Sparkles className="h-3 w-3 text-amber-400 animate-pulse" />
+                  <span>{product.badge || "PREMIUM LEVEL"}</span>
+                </span>
 
-                  <span className="text-[10px] text-slate-400 font-medium font-mono">{product.size}</span>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-sm text-slate-800 leading-tight flex items-start space-x-1.5">
-                    <span>{product.name}</span>
-                  </h4>
-                  <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">{product.desc}</p>
-                </div>
+                {/* Locks check */}
+                {isComplianceLimited && (
+                  <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs flex flex-col items-center justify-center p-4 text-center text-white space-y-2.5">
+                    <div className="h-9 w-9 rounded-full bg-rose-500/20 border border-rose-400 flex items-center justify-center text-rose-200">
+                      <Lock className="h-4.5 w-4.5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xs uppercase tracking-widest text-slate-100">Access Locked</h4>
+                      <p className="text-[10px] text-slate-300 max-w-[220px] mt-1 leading-normal font-sans">
+                        Please complete your regular compliance monthly donation to unlock standard courses and premium files.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div className="pt-4 mt-4 border-t border-slate-50 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                <span>{product.format}</span>
-                <button
-                  type="button"
-                  onClick={handleActionClick}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-                    isCardSuccess
-                      ? "bg-emerald-50 text-emerald-600"
-                      : isCardDownloading
-                      ? "bg-slate-50 text-slate-500 font-normal italic"
-                      : "bg-indigo-50 hover:bg-indigo-100 text-indigo-700"
-                  }`}
-                >
-                  {isCardSuccess ? (
-                    <>
-                      <Check className="h-3.5 w-3.5" />
-                      <span>Loaded!</span>
-                    </>
-                  ) : isCardDownloading ? (
-                    <>
-                      <div className="h-3 w-3 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-                      <span>Downloading...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Download className="h-3.5 w-3.5" />
-                      <span>Download</span>
-                    </>
-                  )}
-                </button>
+              {/* Body */}
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-1.5">
+                  <h4 className="font-black text-slate-900 text-sm md:text-base tracking-tight leading-snug">
+                    {product.name}
+                  </h4>
+                  <p className="text-xs text-slate-500 leading-relaxed font-sans">
+                    {product.desc}
+                  </p>
+                </div>
+
+                {!isComplianceLimited && (
+                  <div className="space-y-3 pt-3 border-t border-slate-50">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      {/* PDF study link */}
+                      {product.pdfUrl ? (
+                        <a
+                          href={product.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-150 transition-colors cursor-pointer"
+                        >
+                          <FileText className="h-3.5 w-3.5 text-emerald-600" />
+                          <span>PDF Guide</span>
+                          <ExternalLink className="h-3 w-3 opacity-60" />
+                        </a>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 italic">No PDF linked</span>
+                      )}
+
+                      {/* Video streaming */}
+                      {product.videoUrl ? (
+                        <button
+                          type="button"
+                          onClick={() => toggleVideoActive(product.id)}
+                          className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                            isVideoActive
+                              ? "bg-slate-900 text-white"
+                              : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-100"
+                          }`}
+                        >
+                          <Video className="h-3.5 w-3.5" />
+                          <span>{isVideoActive ? "Hide Video Lecture" : "Watch Lecture"}</span>
+                        </button>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 italic">No Video linked</span>
+                      )}
+
+                      {/* Simulations */}
+                      <button
+                        type="button"
+                        onClick={handleDownloadSimulate}
+                        className={`ml-auto px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition-all flex items-center space-x-1 cursor-pointer ${
+                          isCardSuccess
+                            ? "bg-amber-50 text-amber-700 font-sans"
+                            : isCardDownloading
+                            ? "bg-slate-50 text-slate-400 italic font-mono"
+                            : "text-slate-400 hover:text-slate-700 font-sans"
+                        }`}
+                        title="Simulate offline study pack archive zip download"
+                      >
+                        {isCardSuccess ? (
+                          <>
+                            <Check className="h-3 w-3" />
+                            <span>In-App Saved!</span>
+                          </>
+                        ) : isCardDownloading ? (
+                          <>
+                            <div className="h-3 w-3 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                            <span>Zipping...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Download className="h-3 w-3" />
+                            <span>Simulate Offline Download</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* YouTube lesson iframe embed */}
+                    {isVideoActive && product.videoUrl && (
+                      <div className="bg-black aspect-video w-full rounded-xl overflow-hidden relative shadow-inner border border-slate-200 animate-fade-in mt-3">
+                        <iframe
+                          src={product.videoUrl}
+                          title={`${product.name} Course Lecture Video`}
+                          className="absolute inset-0 w-full h-full border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           );

@@ -103,5 +103,7 @@ export interface PremiumProduct {
   image: string;
   desc: string;
   badge: string;
+  pdfUrl?: string;
+  videoUrl?: string;
 }
 
