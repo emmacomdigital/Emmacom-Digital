@@ -151,8 +151,8 @@ export default function FrontendLanding({
 
             {/* Desktop Menu links */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#courses-showcase" className="text-sm text-slate-600 hover:text-indigo-600 font-semibold transition-all">
-                Our Courses
+              <a href="#premium-showcase" className="text-sm text-slate-600 hover:text-indigo-600 font-semibold transition-all">
+                Premium Catalog
               </a>
               <a href="#program-benefits" className="text-sm text-slate-600 hover:text-indigo-600 font-semibold transition-all">
                 Partner Benefits
@@ -217,11 +217,11 @@ export default function FrontendLanding({
             id="landing-mobile-dropdown-menu"
           >
             <a 
-              href="#courses-showcase" 
+              href="#premium-showcase" 
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 text-sm text-slate-700 hover:text-indigo-600 font-medium rounded-lg"
             >
-              Our Courses
+              Premium Catalog
             </a>
             <a 
               href="#program-benefits" 
@@ -315,19 +315,19 @@ export default function FrontendLanding({
                   <ArrowRight className="h-4.5 w-4.5" />
                 </button>
                 <a
-                  href="#courses-showcase"
+                  href="#premium-showcase"
                   className="w-full sm:w-auto py-3.5 px-8 text-sm text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 font-bold rounded-2xl transition-all cursor-pointer shadow-xs flex items-center justify-center space-x-2"
                 >
-                  <PlayCircle className="h-4.5 w-4.5 text-indigo-600" />
-                  <span>Browse Syllabus</span>
+                  <Sparkles className="h-4.5 w-4.5 text-indigo-600" />
+                  <span>Browse Premium Catalog</span>
                 </a>
               </div>
 
               {/* Stat badges */}
               <div className="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200 max-w-md mx-auto lg:mx-0">
                 <div id="hero-stat-1">
-                  <span className="block text-2xl font-black text-indigo-600">4+</span>
-                  <span className="block text-slate-500 text-[11px] font-bold uppercase tracking-wider">Premium Courses</span>
+                  <span className="block text-2xl font-black text-indigo-600">6+</span>
+                  <span className="block text-slate-500 text-[11px] font-bold uppercase tracking-wider">Premium Assets</span>
                 </div>
                 <div id="hero-stat-2">
                   <span className="block text-2xl font-black text-indigo-600">20%</span>
@@ -389,76 +389,7 @@ export default function FrontendLanding({
         </div>
       </section>
 
-      {/* Courses Section */}
-      <section className="bg-white py-16 sm:py-24 border-y border-gray-150" id="courses-showcase">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4" id="courses-header-block">
-            <span className="text-xs text-indigo-600 font-extrabold tracking-widest uppercase">SYLLABUS & TRAINING LICENSE</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-sans">
-              Elite Skill Masterclasses You Instantly Unlock
-            </h2>
-            <p className="text-base text-slate-600 font-sans">
-              Gain access to industry-ready training program materials taught with sequential focus on practical deployment. No fluff, just pure high-income assets.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8" id="landing-courses-grid">
-            {courses.map(course => {
-              const IconComponent = course.icon;
-              return (
-                <div 
-                  key={course.id}
-                  className="bg-slate-50/50 hover:bg-white rounded-3xl border border-slate-150 p-6 md:p-8 hover:shadow-xl transition-all duration-300 relative group flex flex-col justify-between"
-                  id={`course-card-${course.id}`}
-                >
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3.5">
-                        <div className={`h-12 w-12 bg-gradient-to-r ${course.color} rounded-2xl flex items-center justify-center text-white shadow-md`}>
-                          <IconComponent className="h-6 w-6" />
-                        </div>
-                        <div>
-                          <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">{course.difficulty}</span>
-                          <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">{course.title}</h3>
-                        </div>
-                      </div>
-                      <span className="text-xs bg-indigo-50 border border-indigo-100 text-indigo-700 py-1.5 px-3 rounded-full font-bold flex items-center space-x-1 font-mono">
-                        <Clock className="h-3.5 w-3.5" />
-                        <span>{course.duration}</span>
-                      </span>
-                    </div>
-
-                    <p className="text-sm text-slate-650 leading-relaxed font-sans">{course.description}</p>
-
-                    <div className="space-y-2 border-t border-slate-200/50 pt-4">
-                      <span className="block text-[11px] font-extrabold text-slate-450 uppercase tracking-widest mb-1.5">What you will learn:</span>
-                      <ul className="space-y-2">
-                        {course.highlights.map((hlt, idx) => (
-                          <li key={idx} className="flex items-start text-xs text-slate-600 space-x-2">
-                            <BadgeCheck className="h-4.5 w-4.5 text-indigo-600 shrink-0 mt-0.5" />
-                            <span className="font-sans font-medium">{hlt}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Includes Certificate & License</span>
-                    <button 
-                      onClick={onRegisterClick}
-                      className="text-xs text-indigo-600 group-hover:text-indigo-800 font-bold flex items-center space-x-1 cursor-pointer transition-colors"
-                    >
-                      <span>Unlock Course</span>
-                      <ChevronRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Featured Premium Product Suite & Flyers Section */}
       <section className="bg-slate-50 py-16 sm:py-24 border-b border-gray-155" id="premium-showcase">
