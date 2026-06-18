@@ -51,6 +51,7 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
   // Premium Products Editor State
   const initialProductId = storeState.premiumProducts && storeState.premiumProducts[0] ? storeState.premiumProducts[0].id : "p-1";
   const [selectedProductId, setSelectedProductId] = useState(initialProductId);
+  const [isAddingNew, setIsAddingNew] = useState(false);
 
   // Dynamic initializer for edit fields
   const activeProd = storeState.premiumProducts?.find(p => p.id === selectedProductId) || storeState.premiumProducts?.[0];
@@ -62,6 +63,7 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
 
   // Ensure that state resets if another product is selected
   const handleProductSelect = (id: string) => {
+    setIsAddingNew(false);
     setSelectedProductId(id);
     const prod = storeState.premiumProducts?.find(p => p.id === id);
     if (prod) {
@@ -72,16 +74,58 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
     }
   };
 
+  const handleCreateNewClick = () => {
+    setIsAddingNew(true);
+    setProdName("");
+    setProdBadge("DIGITAL GUIDE");
+    setProdDesc("");
+    setProdImage("https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600");
+  };
+
   const handleSaveProduct = (e: FormEvent) => {
     e.preventDefault();
     if (!prodName.trim()) return;
-    storeState.updatePremiumProduct(selectedProductId, prodName, prodDesc, prodBadge, prodImage);
+    if (isAddingNew) {
+      const newId = storeState.addPremiumProduct(prodName, prodDesc, prodBadge, prodImage);
+      setSelectedProductId(newId);
+      setIsAddingNew(false);
+    } else {
+      storeState.updatePremiumProduct(selectedProductId, prodName, prodDesc, prodBadge, prodImage);
+    }
     setProductSuccess(true);
     onRefresh();
     setTimeout(() => setProductSuccess(false), 4000);
   };
 
+  const handleDeleteProduct = () => {
+    if (isAddingNew) {
+      setIsAddingNew(false);
+      const firstProd = storeState.premiumProducts?.[0];
+      if (firstProd) {
+        handleProductSelect(firstProd.id);
+      }
+      return;
+    }
+    if (window.confirm(`Are you sure you want to delete "${prodName}" from the premium product catalog?`)) {
+      storeState.deletePremiumProduct(selectedProductId);
+      onRefresh();
+      const firstProd = storeState.premiumProducts?.[0];
+      if (firstProd) {
+        handleProductSelect(firstProd.id);
+      } else {
+        setSelectedProductId("");
+        setProdName("");
+        setProdBadge("");
+        setProdDesc("");
+        setProdImage("");
+      }
+      setProductSuccess(true);
+      setTimeout(() => setProductSuccess(false), 4000);
+    }
+  };
+
   const handleRestoreDefaults = () => {
+    setIsAddingNew(false);
     storeState.restoreDefaultPremiumProducts();
     onRefresh();
     const firstProd = storeState.premiumProducts?.[0];
@@ -465,21 +509,43 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Select Product to Modify</label>
-                <select
-                  value={selectedProductId}
-                  onChange={(e) => handleProductSelect(e.target.value)}
-                  className="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
-                >
-                  {(storeState.premiumProducts && storeState.premiumProducts.length > 0 
-                    ? storeState.premiumProducts 
-                    : []
-                  ).map(prod => (
-                    <option key={prod.id} value={prod.id}>
-                      {prod.id.toUpperCase()}: {prod.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Select Product to Modify</label>
+                  <button
+                    type="button"
+                    onClick={handleCreateNewClick}
+                    className="text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center space-x-1 cursor-pointer"
+                  >
+                    <span>+ Add New Product</span>
+                  </button>
+                </div>
+                {isAddingNew ? (
+                  <div className="flex items-center justify-between p-3 bg-indigo-50 border border-indigo-200 rounded-lg text-xs text-indigo-800 font-semibold" id="new-prod-badge-info">
+                    <span>✨ Creating New Product Asset...</span>
+                    <button
+                      type="button"
+                      onClick={() => handleProductSelect(selectedProductId)}
+                      className="text-[10px] text-slate-500 hover:text-slate-700 bg-white border border-slate-200 rounded px-2 py-1 font-bold shadow-xs cursor-pointer"
+                    >
+                      Cancel Create
+                    </button>
+                  </div>
+                ) : (
+                  <select
+                    value={selectedProductId}
+                    onChange={(e) => handleProductSelect(e.target.value)}
+                    className="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-200 font-sans focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+                  >
+                    {(storeState.premiumProducts && storeState.premiumProducts.length > 0 
+                      ? storeState.premiumProducts 
+                      : []
+                    ).map(prod => (
+                      <option key={prod.id} value={prod.id}>
+                        {prod.id.toUpperCase()}: {prod.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
 
               <form onSubmit={handleSaveProduct} className="space-y-4 pt-2 border-t border-slate-150">
@@ -563,17 +629,29 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                   </span>
                 </div>
 
-                <div className="flex gap-2.5">
+                <div className="flex flex-wrap gap-2.5">
                   <button
                     type="submit"
-                    className="flex-1 bg-indigo-600 hover:bg-slate-900 text-white text-xs font-bold py-3 px-4 rounded-xl shadow-md transition-colors uppercase tracking-wider cursor-pointer font-sans"
+                    className="flex-1 bg-indigo-600 hover:bg-slate-900 text-white text-xs font-bold py-3.5 px-4 rounded-xl shadow-md transition-colors uppercase tracking-wider cursor-pointer font-sans min-w-[120px]"
                   >
-                    Save Asset Details
+                    {isAddingNew ? "Create Digital Product" : "Save Asset Details"}
                   </button>
+
+                  {!isAddingNew && storeState.premiumProducts && storeState.premiumProducts.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleDeleteProduct}
+                      className="bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-extrabold py-3.5 px-4 rounded-xl border border-rose-200 transition-colors cursor-pointer"
+                      title="Delete this premium product permanently"
+                    >
+                      Delete Product
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     onClick={handleRestoreDefaults}
-                    className="bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-extrabold py-3 px-4 rounded-xl border border-slate-200 transition-colors cursor-pointer"
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-extrabold py-3.5 px-4 rounded-xl border border-slate-200 transition-colors cursor-pointer"
                     title="Restore all items to defaults"
                   >
                     Reset All

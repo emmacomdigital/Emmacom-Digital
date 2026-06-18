@@ -1246,6 +1246,33 @@ export class AffiliateSystemStore {
     }
   }
 
+  // Add a new premium suite product catalog item
+  public addPremiumProduct(name: string, desc: string, badge: string, image: string): string {
+    const newId = `p-${Date.now()}`;
+    const newProduct: PremiumProduct = {
+      id: newId,
+      name: name.trim(),
+      desc: desc.trim(),
+      badge: badge.trim(),
+      image: image.trim() || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600"
+    };
+    this.premiumProducts.push(newProduct);
+    this.addAuditLog("USR_ADMIN", "Premium product added", `Created new catalog asset "${newProduct.name}"`);
+    this.saveAll();
+    return newId;
+  }
+
+  // Delete a premium suite product catalog item
+  public deletePremiumProduct(id: string): void {
+    const index = this.premiumProducts.findIndex(p => p.id === id);
+    if (index !== -1) {
+      const deletedName = this.premiumProducts[index].name;
+      this.premiumProducts.splice(index, 1);
+      this.addAuditLog("USR_ADMIN", "Premium product deleted", `Removed catalog asset "${deletedName}"`);
+      this.saveAll();
+    }
+  }
+
   // Restore defaults
   public restoreDefaultPremiumProducts(): void {
     this.premiumProducts = JSON.parse(JSON.stringify(SEED_PREMIUM_PRODUCTS));

@@ -119,7 +119,7 @@ export default function JoinPage({ storeState, onRefresh, onJoinSuccess, initial
           Join Emmacom Affiliate Program
         </h1>
         <p className="text-gray-600 mt-2 max-w-xl mx-auto text-sm md:text-base">
-          Sign up to unlock professional digital products, courses, member privileges, and start earning recurring single-level commissions.
+          Sign up to unlock professional digital products, premium marketing assets, member privileges, and start earning recurring single-level commissions.
         </p>
       </div>
 

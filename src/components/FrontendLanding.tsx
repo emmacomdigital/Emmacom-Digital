@@ -39,49 +39,6 @@ export default function FrontendLanding({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  const courses = [
-    {
-      id: "course-1",
-      title: "Affiliate Funnel Mastery",
-      description: "Master the architecture of building automated lead-generation assets. Drive premium conversions and secure recurring passive commission streams.",
-      duration: "12 Modules",
-      difficulty: "All Levels",
-      icon: BookOpen,
-      color: "from-indigo-500 to-purple-600",
-      highlights: ["High-ticket link promotion strategy", "Opt-in funnel building templates", "Email automation copy scripts"]
-    },
-    {
-      id: "course-2",
-      title: "Full-Stack Web & Cloud Architecture",
-      description: "Build cutting-edge fast responsive apps using React, Vite, Node, and deploy them on scalable modern cloud infrastructure.",
-      duration: "18 Modules",
-      difficulty: "Intermediate",
-      icon: Layers,
-      color: "from-sky-500 to-indigo-600",
-      highlights: ["React, Vite, Node runtime systems", "Cloud API integrations", "Persistent cloud databases"]
-    },
-    {
-      id: "course-3",
-      title: "Digital Product Formulation",
-      description: "Learn how to turn knowledge into digital formats: design premium e-books, create value-packed video training classes, and construct useful web templates.",
-      duration: "10 Modules",
-      difficulty: "All Levels",
-      icon: BrainCircuit,
-      color: "from-purple-500 to-pink-600",
-      highlights: ["Market research validation frameworks", "Audio/video recording setup guides", "Sales page writing frameworks"]
-    },
-    {
-      id: "course-4",
-      title: "Smart Organic Lead Generation & Ads",
-      description: "Acquire hyper-targeted prospects on autopilot without exhausting ad spend. Implement organic traffic loops and optimized paid ad assets.",
-      duration: "8 Modules",
-      difficulty: "Beginner Friendly",
-      icon: TrendingUp,
-      color: "from-pink-500 to-rose-600",
-      highlights: ["Viral short-form video formulas", "Meta, Google & LinkedIn ad setups", "Conversion rate tracking metrics"]
-    }
-  ];
-
   const benefits = [
     {
       id: "benefit-1",
@@ -92,8 +49,8 @@ export default function FrontendLanding({
     },
     {
       id: "benefit-2",
-      title: "Premium Unlimited Academy Access",
-      description: "Instantly unlock the entire library of live & on-demand training courses written by cloud development and marketing experts.",
+      title: "Premium Products Vault Access",
+      description: "Instantly unlock the entire library of live digital products, marketing files, masterclasses, and pre-formatted marketing assets.",
       icon: Award,
       color: "text-sky-600 bg-sky-50"
     },
@@ -116,7 +73,7 @@ export default function FrontendLanding({
   const faqs = [
     {
       question: "What is Emmacom Digital and how does the affiliate program work?",
-      answer: "Emmacom Digital is an elite skill acquisition academy. Members pay a one-time registration fee to unlock comprehensive high-ticket masterclasses in digital product creation, full-stack dev, and affiliate marketing. Once registered, you obtain an authorized affiliate partner license, allowing you to recruit others using your link and earn both immediate registration commissions (20%) and recurring passive rewards."
+      answer: "Emmacom Digital is an elite skill and digital assets hub. Members pay a one-time registration fee to unlock comprehensive premium digital products, high-ticket masterclasses, and pre-formatted marketing assets. Once registered, you obtain an authorized affiliate partner license, allowing you to recruit others using your link and earn both immediate registration commissions (20%) and recurring passive rewards."
     },
     {
       question: "Is there a monthly commitment required to keep my affiliate status active?",
@@ -443,7 +400,7 @@ export default function FrontendLanding({
                       onClick={onRegisterClick}
                       className="text-xs text-indigo-600 hover:text-indigo-800 font-extrabold flex items-center space-x-1 cursor-pointer transition-colors uppercase tracking-wider"
                     >
-                      <span>Get Flyer</span>
+                      <span>Join Now</span>
                       <ArrowRight className="h-3 w-3 transform group-hover:translate-x-1 transition-transform" />
                     </button>
                   </div>
@@ -534,7 +491,7 @@ export default function FrontendLanding({
                 <div className="space-y-1">
                   <h4 className="text-sm font-extrabold tracking-tight">Purchase Platform License</h4>
                   <p className="text-slate-400 text-xs font-sans leading-relaxed">
-                    Complete registration (₦10,000) using our Flutterwave interface simulation to unlock all masterclasses and your specialized partner tracking links.
+                    Complete registration (₦10,000) using our Flutterwave interface simulation to unlock the entire digital product vault and your specialized partner tracking links.
                   </p>
                 </div>
               </div>
@@ -546,7 +503,7 @@ export default function FrontendLanding({
                 <div className="space-y-1">
                   <h4 className="text-sm font-extrabold tracking-tight">Share Your Referrals Tracking Link</h4>
                   <p className="text-slate-400 text-xs font-sans leading-relaxed">
-                    Recommend Academy courses to prospective digital product creators and affiliates using your customized tracking link to claim automatic attribution.
+                    Recommend premium digital products and assets to prospective creators and affiliates using your customized tracking link to claim automatic attribution.
                   </p>
                 </div>
               </div>
