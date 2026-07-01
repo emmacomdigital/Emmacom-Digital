@@ -913,11 +913,11 @@ export default function AdminDashboard({ storeState, onRefresh }: AdminDashboard
                         <div className="h-[1px] bg-slate-100 flex-grow"></div>
                       </div>
                       <input
-                        type="url"
+                        type="text"
                         value={prodImage.startsWith("data:") ? "" : prodImage}
                         onChange={(e) => setProdImage(e.target.value)}
                         className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                        placeholder="Or enter image URL: https://images.unsplash.com/..."
+                        placeholder="e.g. /images/stockstrading.jpeg or https://..."
                       />
                     </div>
                   </div>
