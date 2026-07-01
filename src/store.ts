@@ -343,7 +343,7 @@ const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
   {
     id: "p-1",
     name: "Conversion Secrets: Digital Affiliate Handbook",
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600",
+    image: "/images/p1_affiliate_handbook.jpg",
     desc: "Proven tactics and copy-paste templates to target social media platforms to refer new users.",
     badge: "E-BOOK HANDBOOK",
     pdfUrl: "https://drive.google.com/file/d/1BfS10Xp70X8O3fVq7D_7Z_S07Z4H9n_K/view?usp=sharing",
@@ -352,7 +352,7 @@ const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
   {
     id: "p-2",
     name: "WhatsApp Auto-Responder Templates & Funnel Swipe File",
-    image: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=600",
+    image: "/images/p2_whatsapp_templates.jpg",
     desc: "Boost communication response rates using our exact sequence swipe codes.",
     badge: "MOCK TRANSCRIPT",
     pdfUrl: "https://drive.google.com/file/d/1D9r8N6p-m8oW2MhQ0p3_N9Z9mG6t7H9n/view?usp=sharing",
@@ -361,7 +361,7 @@ const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
   {
     id: "p-3",
     name: "Naira Arbitrage Master Spreadsheets & Audit Pack",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600",
+    image: "/images/p3_arbitrage_excel.jpg",
     desc: "Accurately record metrics, track margins, and evaluate business efficiency.",
     badge: "EXCEL WORKBOOK",
     pdfUrl: "https://drive.google.com/file/d/1H1p2S4r_nKoX4M9T9v7-X_Z7QG6H9n_K/view?usp=sharing",
@@ -370,7 +370,7 @@ const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
   {
     id: "p-4",
     name: "Advanced Google Search Ads Campaign Guide",
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=600",
+    image: "/images/p4_google_ads_guide.jpg",
     desc: "Scale highly targeted conversion pipelines to generate automated referral codes signups.",
     badge: "VIDEO SECRETS",
     pdfUrl: "https://drive.google.com/file/d/1J2q3S5r_m8oX2MhQ9p6_X_Z9mG6t7H9n/view?usp=sharing",
@@ -379,7 +379,7 @@ const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
   {
     id: "p-5",
     name: "Emmacom Automated Multi-Channel Campaign Broadcaster",
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=600",
+    image: "/images/p5_campaign_broadcaster.jpg",
     desc: "Broadcast personalized messages to multiple networks safely without account suspension.",
     badge: "UTILITY PIPELINE",
     pdfUrl: "https://drive.google.com/file/d/1L3r4S6p-m9oW3MhQ2p4_X_Z9mG6t7H9n/view?usp=sharing",
@@ -388,7 +388,7 @@ const SEED_PREMIUM_PRODUCTS: PremiumProduct[] = [
   {
     id: "p-6",
     name: "Single-Tier Funnel Builder React Starter Kit",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600",
+    image: "/images/p6_funnel_builder.jpg",
     desc: "Spin up high-converting landing sheets that perfectly sync sponsorship IDs on redirect.",
     badge: "REACT FRAMEWORK",
     pdfUrl: "https://drive.google.com/file/d/1N4r5S7p-m0oW4MhQ3p5_X_Z9mG6t7H9n/view?usp=sharing",
@@ -482,6 +482,17 @@ export class AffiliateSystemStore {
     this.auditLogs = loadFromStorage<AuditLog[]>("emmacom_logs", SEED_AUDIT_LOGS);
     this.systemDate = loadFromStorage<string>("emmacom_system_date", "2026-06-13T10:00:00Z");
     this.premiumProducts = loadFromStorage<PremiumProduct[]>("emmacom_premium_products", SEED_PREMIUM_PRODUCTS);
+
+    // Migrate any Unsplash image URLs to the new local public image paths automatically
+    this.premiumProducts = this.premiumProducts.map(p => {
+      if (p.image && p.image.includes("unsplash.com")) {
+        const seedMatch = SEED_PREMIUM_PRODUCTS.find(sp => sp.id === p.id);
+        if (seedMatch) {
+          return { ...p, image: seedMatch.image };
+        }
+      }
+      return p;
+    });
 
     // Persist if not already there
     this.saveAll();
